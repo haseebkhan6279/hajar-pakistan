@@ -3,10 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/components/cart/CartProvider";
+import { Price } from "@/components/currency/Price";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink } from "@/components/ui/Button";
-import { formatPrice } from "@/lib/data";
 import { productPath } from "@/lib/paths";
 
 export default function CartPage() {
@@ -105,7 +105,7 @@ export default function CartPage() {
 
                       <div className="text-right">
                         <p className="text-base text-hj-ink">
-                          {formatPrice(line.product.price * line.qty)}
+                          <Price amount={line.product.price * line.qty} />
                         </p>
                         <button
                           type="button"
@@ -129,7 +129,7 @@ export default function CartPage() {
             <dl className="mt-6 space-y-3 text-sm">
               <div className="flex justify-between">
                 <dt className="text-hj-muted">Subtotal</dt>
-                <dd>{formatPrice(subtotal)}</dd>
+                <dd><Price amount={subtotal} /></dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-hj-muted">Delivery</dt>
@@ -140,7 +140,7 @@ export default function CartPage() {
               <div className="flex justify-between border-t border-hj-border pt-3 text-base">
                 <dt className="text-hj-ink">Total</dt>
                 <dd className="font-display text-2xl text-hj-ink">
-                  {formatPrice(total)}
+                  <Price amount={total} />
                 </dd>
               </div>
             </dl>

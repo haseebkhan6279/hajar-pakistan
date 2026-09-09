@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartProvider";
+import { Price } from "@/components/currency/Price";
+import { useCurrency } from "@/components/currency/CurrencyProvider";
+import { formatPrice } from "@/lib/data";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink } from "@/components/ui/Button";
-import { formatPrice } from "@/lib/data";
 
 const PK_PROVINCES = [
   "Punjab",
@@ -45,6 +47,7 @@ const field =
 export default function CheckoutPage() {
   const router = useRouter();
   const { lines, subtotal, total, clearCart, hydrated } = useCart();
+  const { converted, code } = useCurrency();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [country, setCountry] = useState("Pakistan");
@@ -307,7 +310,7 @@ export default function CheckoutPage() {
                   </p>
                 </div>
                 <span className="shrink-0 text-sm text-hj-ink">
-                  {formatPrice(l.product.price * l.qty)}
+                  <Price amount={l.product.price * l.qty} />
                 </span>
               </li>
             ))}
@@ -316,7 +319,7 @@ export default function CheckoutPage() {
           <dl className="mt-6 space-y-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-hj-muted">Subtotal</dt>
-              <dd>{formatPrice(subtotal)}</dd>
+              <dd><Price amount={subtotal} /></dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-hj-muted">Delivery</dt>
@@ -333,10 +336,23 @@ export default function CheckoutPage() {
             <div className="flex justify-between border-t border-hj-border pt-3">
               <dt className="text-hj-ink">Estimated total</dt>
               <dd className="font-display text-2xl text-hj-ink">
-                {formatPrice(total)}
+                <Price amount={total} />
               </dd>
             </div>
           </dl>
+
+          {/*
+            The basket converts for readability, but the order is raised in
+            rupees and that is the figure the team will quote. Saying so here,
+            against the total, is the last point at which it can be misread.
+          */}
+          {converted && (
+            <p className="mt-4 border-t border-hj-border pt-4 text-[12px] leading-relaxed text-hj-muted">
+              {code} figures are indicative, converted at today&apos;s rate.
+              Your order is placed and settled in{" "}
+              <span className="text-hj-ink">{formatPrice(total)}</span>.
+            </p>
+          )}
 
           {error && (
             <p className="mt-5 border border-hj-danger/30 bg-hj-danger/5 px-4 py-3 text-[13px] leading-relaxed text-hj-danger">

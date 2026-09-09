@@ -4,7 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
-import { formatPrice, savePercent, SIZE_GUIDE, type Product } from "@/lib/data";
+import { Price } from "@/components/currency/Price";
+import { savePercent, SIZE_GUIDE, type Product } from "@/lib/data";
 import { cn } from "@/lib/clsx";
 
 export function ProductDetailClient({ product }: { product: Product }) {
@@ -190,12 +191,12 @@ export function ProductDetailClient({ product }: { product: Product }) {
               save !== null ? "text-hj-danger" : "text-hj-ink"
             )}
           >
-            {formatPrice(product.price)}
+            <Price amount={product.price} />
           </span>
           {product.compareAtPrice && (
             <>
               <span className="text-base text-hj-muted line-through">
-                {formatPrice(product.compareAtPrice)}
+                <Price amount={product.compareAtPrice} />
               </span>
               <span className="bg-hj-gold-wash px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-hj-gold-deep">
                 Save {save}%

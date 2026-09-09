@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { QuickAdd } from "@/components/QuickAdd";
-import { formatPrice, savePercent, type Product } from "@/lib/data";
+import { Price } from "@/components/currency/Price";
+import { savePercent, type Product } from "@/lib/data";
 import { productPath } from "@/lib/paths";
 import { cn } from "@/lib/clsx";
 
@@ -244,11 +245,11 @@ export function CollectionTabs({ tabs }: { tabs: CollectionTab[] }) {
                       save !== null ? "text-hj-danger" : "text-hj-ink-soft"
                     )}
                   >
-                    {formatPrice(product.price)}
+                    <Price amount={product.price} />
                   </span>
                   {product.compareAtPrice && (
                     <span className="text-xs text-hj-muted line-through">
-                      {formatPrice(product.compareAtPrice)}
+                      <Price amount={product.compareAtPrice} />
                     </span>
                   )}
                 </p>

@@ -8,10 +8,12 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { BackToTop } from "@/components/BackToTop";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CartProvider } from "@/components/cart/CartProvider";
+import { CurrencyProvider } from "@/components/currency/CurrencyProvider";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Analytics } from "@/components/seo/Analytics";
 import { organizationSchema, rootMetadata, websiteSchema } from "@/lib/seo";
+import { getRates } from "@/lib/currency";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -29,9 +31,13 @@ const jost = Jost({
 
 export const metadata: Metadata = rootMetadata();
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  /* One snapshot for the whole tree, so every price on a page converts off
+     the same rates. Cached for twelve hours — see lib/currency. */
+  const rates = await getRates();
+
   return (
     <html
       lang="en"
@@ -51,18 +57,20 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <CartProvider>
-          <PromoBanner />
-          <SiteHeader />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <SiteFooter />
-          <CartDrawer />
-          <CookieConsent />
-          <WhatsAppButton />
-          <BackToTop />
-        </CartProvider>
+        <CurrencyProvider rates={rates}>
+          <CartProvider>
+            <PromoBanner />
+            <SiteHeader />
+            <main id="main" className="flex-1">
+              {children}
+            </main>
+            <SiteFooter />
+            <CartDrawer />
+            <CookieConsent />
+            <WhatsAppButton />
+            <BackToTop />
+          </CartProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );

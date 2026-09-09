@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useCart } from "@/components/cart/CartProvider";
-import { formatPrice } from "@/lib/data";
+import { Price } from "@/components/currency/Price";
 import { productPath } from "@/lib/paths";
 
 export function CartDrawer() {
@@ -145,7 +145,7 @@ export function CartDrawer() {
                           </button>
                         </div>
                         <span className="text-sm text-hj-ink">
-                          {formatPrice(line.product.price * line.qty)}
+                          <Price amount={line.product.price * line.qty} />
                         </span>
                       </div>
 
@@ -168,7 +168,7 @@ export function CartDrawer() {
                   Subtotal
                 </span>
                 <span className="font-display text-2xl text-hj-ink">
-                  {formatPrice(subtotal)}
+                  <Price amount={subtotal} />
                 </span>
               </div>
               <p className="mt-1 text-[11px] text-hj-muted">

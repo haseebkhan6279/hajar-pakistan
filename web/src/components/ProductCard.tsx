@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { QuickAdd } from "@/components/QuickAdd";
-import { formatPrice, savePercent, type Product } from "@/lib/data";
+import { Price } from "@/components/currency/Price";
+import { savePercent, type Product } from "@/lib/data";
 import { productPath } from "@/lib/paths";
 import { cn } from "@/lib/clsx";
 
@@ -73,11 +74,11 @@ export function ProductCard({
               save !== null ? "text-hj-danger" : "text-hj-ink"
             )}
           >
-            {formatPrice(product.price)}
+            <Price amount={product.price} />
           </span>
           {product.compareAtPrice && (
             <span className="ml-2 whitespace-nowrap text-hj-muted line-through">
-              {formatPrice(product.compareAtPrice)}
+              <Price amount={product.compareAtPrice} />
             </span>
           )}
         </h3>

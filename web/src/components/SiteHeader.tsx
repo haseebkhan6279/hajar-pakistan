@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LogoMark } from "@/components/Brand";
 import { useCart } from "@/components/cart/CartProvider";
+import { CurrencySwitcher } from "@/components/currency/CurrencySwitcher";
 import { childCollections, HOUSES } from "@/lib/data";
 import { cn } from "@/lib/clsx";
 
@@ -178,9 +179,7 @@ export function SiteHeader() {
             collapsed && "lg:top-1/2 lg:-translate-y-1/2"
           )}
         >
-          <span className="mr-2 hidden text-[12px] tracking-[0.12em] text-hj-ink md:block">
-            PKR
-          </span>
+          <CurrencySwitcher className="mr-1 hidden md:block" />
 
           <Link href="/contact" aria-label="Account" className={iconBtn}>
             <svg width="19" height="19" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -301,6 +300,13 @@ export function SiteHeader() {
                 ×
               </button>
             </div>
+            <div className="flex items-center justify-between border-b border-hj-border px-5 py-3">
+              <span className="text-[11px] uppercase tracking-[0.16em] text-hj-muted">
+                Currency
+              </span>
+              <CurrencySwitcher />
+            </div>
+
             <nav className="flex flex-col overflow-y-auto px-5 py-4">
               <Link
                 href="/products"
