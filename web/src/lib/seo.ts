@@ -148,7 +148,36 @@ export function organizationSchema() {
       areaServed: "PK",
       availableLanguage: ["en", "ur"],
     },
+    founder: { "@id": SITE.url + "/#designer" },
     sameAs: [SITE.social.instagram, SITE.social.facebook],
+  };
+}
+
+/**
+ * Nazish Ali as a Person, for /designer.
+ *
+ * Kept as its own node rather than inlined into the Organization so the two
+ * can reference each other: the house names her as founder, she names the
+ * house as her employer, and search engines resolve them to one entity
+ * instead of two unrelated mentions of the same name.
+ */
+export function designerSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": SITE.url + "/#designer",
+    name: "Nazish Ali",
+    jobTitle: "Founder & Creative Director",
+    description:
+      "Founder and creative force behind HAJAR and HAJAR BY NAZISH ALI, reinterpreting Pakistani craftsmanship for the modern woman.",
+    url: absoluteUrl("/designer"),
+    worksFor: { "@id": SITE.url + "/#organization" },
+    knowsAbout: [
+      "Pakistani formal wear",
+      "Hand embellishment",
+      "Couture design",
+    ],
+    sameAs: [SITE.social.instagram],
   };
 }
 

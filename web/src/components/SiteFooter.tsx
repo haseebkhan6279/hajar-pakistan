@@ -16,6 +16,7 @@ const INFORMATION = [
 
 const CUSTOMER_CARE = [
   { href: "/about", label: "Our story" },
+  { href: "/designer", label: "Meet the designer" },
   { href: "/contact", label: "Contact us" },
   { href: "/size-guide", label: "Size guide" },
   { href: "/journal", label: "Journal" },

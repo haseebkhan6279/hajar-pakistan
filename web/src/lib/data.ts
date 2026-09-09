@@ -198,6 +198,62 @@ export const STORY: {
   },
 };
 
+/**
+ * The designer, told at /designer.
+ *
+ * Same rule as BRAND_STORY and STORY: the wording is the house's, so it lives
+ * here rather than in the page, and the page is only responsible for how it
+ * sits on the screen.
+ */
+export const DESIGNER = {
+  eyebrow: "Meet the designer",
+  name: "Nazish Ali",
+  role: "Founder & Creative Director",
+  standfirst: "A personal vision of heritage, femininity and craftsmanship.",
+  /**
+   * No portrait has been supplied yet, so the page draws a monogram plate in
+   * its place. Put a photograph in /public/media and name it here — the page
+   * picks it up with no other change.
+   */
+  portrait: undefined as string | undefined,
+  intro: [
+    "Nazish Ali is the founder and creative force behind HAJAR and HAJAR BY NAZISH ALI — a fashion house born from her appreciation for Pakistani craftsmanship and her desire to reinterpret it for the modern woman.",
+    "For Nazish, fashion has always been about more than creating beautiful clothes. It is about the way a woman feels when she wears them — confident yet graceful, contemporary while still connected to her heritage.",
+  ],
+  /* The hinge sentence between the two halves of the opening — set in display
+     italic rather than buried as a one-line paragraph. */
+  bridge: "Her design language brings these two worlds together.",
+  introAfter: [
+    "Inspired by the richness of Pakistani formal wear, Nazish works with elegant silhouettes, luxurious fabrics and traditional artisanal techniques, giving them a refined and modern perspective. From delicate details to elaborate hand embellishment, every element is considered with intention.",
+  ],
+  sections: [
+    {
+      title: "The vision behind HAJAR",
+      body: [
+        "Nazish created HAJAR with the belief that beautiful formal wear should exist at different levels of craftsmanship and accessibility without losing its identity.",
+        "That vision evolved into two expressions.",
+        "HAJAR offers refined contemporary formals at a more accessible price point — elegant pieces designed for celebrations, festive occasions and the modern wardrobe.",
+        "HAJAR BY NAZISH ALI represents the designer's more exclusive creative expression. Here, intricate handwork, mixed embellishments, luxurious fabrics and detailed craftsmanship take centre stage, allowing each design to become something more distinctive and enduring.",
+        "Though different in their level of detailing and craftsmanship, both are connected by the same design philosophy.",
+      ],
+    },
+    {
+      title: "Her design philosophy",
+      body: [
+        "Nazish believes in creating pieces that feel relevant today without losing the beauty of where they come from.",
+        "Rather than simply recreating tradition, she draws from it — combining elements of Pakistani craftsmanship with modern cuts, thoughtful proportions and a softer contemporary sensibility.",
+        "Her approach is feminine without being predictable, luxurious without being excessive, and traditional without feeling confined by tradition.",
+        "Every collection begins with a feeling, develops through fabric and craftsmanship, and ultimately comes to life on the woman who wears it.",
+      ],
+    },
+  ],
+  quote: {
+    eyebrow: "In her words",
+    text: "I want every HAJAR piece to carry a sense of where we come from while still belonging to the woman of today. For me, true luxury is not simply about how much detail a garment carries — it is about the thought, craftsmanship and feeling behind it.",
+    houses: "HAJAR | HAJAR BY NAZISH ALI",
+  },
+};
+
 export const SIZE_GUIDE = [
   { size: "XS", bust: "32\"", waist: "26\"", hip: "35\"" },
   { size: "S", bust: "34\"", waist: "28\"", hip: "37\"" },

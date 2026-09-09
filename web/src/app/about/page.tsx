@@ -157,6 +157,9 @@ export default async function AboutPage() {
             <ButtonLink href="/products" size="lg">
               Shop the collections
             </ButtonLink>
+            <ButtonLink href="/designer" variant="outline" size="lg">
+              Meet the designer
+            </ButtonLink>
             <ButtonLink href="/contact" variant="outline" size="lg">
               Book an appointment
             </ButtonLink>
