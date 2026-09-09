@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* HAJAR admin — ivory ground, gold accent, ink type.
+   Mirrors web/src/app/globals.css so both apps read as one brand. */
+:root {
+  --hj-canvas: #ffffff;
+  --hj-cream: #fcf9f3;
+  --hj-sand: #f5efe3;
+  --hj-sand-2: #ebe1cd;
+  --hj-border: #e7dfd0;
+  --hj-border-strong: #d3c5aa;
+
+  --hj-ink: #0a0a0a;
+  --hj-ink-soft: #38342c;
+  --hj-muted: #7a7263;
+
+  --hj-gold: #c8992f;
+  --hj-gold-soft: #edd68f;
+  --hj-gold-deep: #8b5e2b;
+  --hj-gold-wash: #fdf8ea;
+
+  --hj-danger: #a83a32;
+  --hj-success: #4e7a46;
+}
+
+@theme inline {
+  --color-hj-canvas: var(--hj-canvas);
+  --color-hj-cream: var(--hj-cream);
+  --color-hj-sand: var(--hj-sand);
+  --color-hj-sand-2: var(--hj-sand-2);
+  --color-hj-border: var(--hj-border);
+  --color-hj-border-strong: var(--hj-border-strong);
+  --color-hj-ink: var(--hj-ink);
+  --color-hj-ink-soft: var(--hj-ink-soft);
+  --color-hj-muted: var(--hj-muted);
+  --color-hj-gold: var(--hj-gold);
+  --color-hj-gold-soft: var(--hj-gold-soft);
+  --color-hj-gold-deep: var(--hj-gold-deep);
+  --color-hj-gold-wash: var(--hj-gold-wash);
+  --color-hj-danger: var(--hj-danger);
+  --color-hj-success: var(--hj-success);
+
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* {
+  border-color: var(--hj-border);
+}
+
+body {
+  margin: 0;
+  background: var(--hj-cream);
+  color: var(--hj-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.tracking-brand {
+  letter-spacing: 0.28em;
+}
+
+:focus-visible {
+  outline: 1px solid var(--hj-gold);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--hj-gold-soft);
+  color: var(--hj-ink);
+}
+
+/* Hairline gold rule used under section headings */
+.rule-gold {
+  background: linear-gradient(
+    90deg,
+    var(--hj-gold) 0%,
+    var(--hj-gold-soft) 40%,
+    transparent 100%
+  );
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* ApexCharts sits on cream — soften its default chrome */
+.apexcharts-tooltip {
+  border: 1px solid var(--hj-border) !important;
+  box-shadow: 0 8px 24px rgb(18 16 12 / 0.08) !important;
+}

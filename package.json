@@ -1,0 +1,21 @@
+{
+  "name": "hajar",
+  "private": true,
+  "workspaces": [
+    "web",
+    "dashboard",
+    "api"
+  ],
+  "scripts": {
+    "db": "node scripts/start-db.js",
+    "dev:web": "npm run dev -w web",
+    "dev:dashboard": "npm run dev -w dashboard",
+    "dev:api": "npm run start:dev -w api",
+    "seed": "npm run seed:catalog -w api",
+    "build": "npm run build -w web && npm run build -w dashboard && npm run build -w api"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "sharp@0.35.4": true
+  }
+}

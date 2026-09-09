@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* HAJAR storefront — white ground, gold accent, ink type.
+   Palette lifted from the brand mark: gold on near-black, inverted to a
+   white canvas so the clothing photography carries the page. */
+:root {
+  --hj-canvas: #ffffff;
+  --hj-cream: #fcf9f3;
+  --hj-sand: #f5efe3;
+  --hj-sand-2: #ebe1cd;
+  --hj-border: #e7dfd0;
+  --hj-border-strong: #d3c5aa;
+
+  --hj-ink: #0a0a0a;
+  --hj-ink-soft: #38342c;
+  --hj-muted: #7a7263;
+
+  /* Sampled from the gold calligraphy inside the logo roundel — the mark the
+     header and footer carry. The logo's gold is a gradient; this is its
+     mid-tone, the value the mark reads as. */
+  --hj-gold: #ddbd6c;
+  --hj-gold-soft: #edd68f;
+  --hj-gold-deep: #8b5e2b;
+  --hj-gold-wash: #fdf8ea;
+
+  --hj-danger: #a83a32;
+  --hj-success: #4e7a46;
+}
+
+@theme inline {
+  --color-hj-canvas: var(--hj-canvas);
+  --color-hj-cream: var(--hj-cream);
+  --color-hj-sand: var(--hj-sand);
+  --color-hj-sand-2: var(--hj-sand-2);
+  --color-hj-border: var(--hj-border);
+  --color-hj-border-strong: var(--hj-border-strong);
+  --color-hj-ink: var(--hj-ink);
+  --color-hj-ink-soft: var(--hj-ink-soft);
+  --color-hj-muted: var(--hj-muted);
+  --color-hj-gold: var(--hj-gold);
+  --color-hj-gold-soft: var(--hj-gold-soft);
+  --color-hj-gold-deep: var(--hj-gold-deep);
+  --color-hj-gold-wash: var(--hj-gold-wash);
+  --color-hj-danger: var(--hj-danger);
+  --color-hj-success: var(--hj-success);
+
+  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-jost);
+  --font-mono: var(--font-mono-stack);
+}
+
+* {
+  border-color: var(--hj-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--hj-canvas);
+  color: var(--hj-ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--hj-gold-soft);
+  color: var(--hj-ink);
+}
+
+/* The deep gold, not `--hj-gold`: a focus ring has to clear 3:1 against the
+   white ground it sits on, and the brand gold is a light mid-tone. */
+:focus-visible {
+  outline: 1px solid var(--hj-gold-deep);
+  outline-offset: 3px;
+}
+
+.font-display {
+  font-family: var(--font-cormorant), ui-serif, Georgia, serif;
+}
+
+/* Wide-tracked lockup used for the wordmark and eyebrow labels */
+.tracking-brand {
+  letter-spacing: 0.3em;
+}
+
+.eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--hj-muted);
+}
+
+/* Hairline gold rule that opens most sections */
+.rule-gold {
+  background: linear-gradient(
+    90deg,
+    var(--hj-gold) 0%,
+    var(--hj-gold-soft) 45%,
+    transparent 100%
+  );
+}
+
+/* --- Motion ------------------------------------------------------------ */
+
+@keyframes hj-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: hj-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-rise-1 {
+  animation: hj-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+.animate-rise-2 {
+  animation: hj-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+}
+.animate-rise-3 {
+  animation: hj-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+/* Panel swap — shorter and flatter than a rise, so tabbing stays snappy */
+@keyframes hj-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: hj-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes hj-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: hj-marquee 34s linear infinite;
+}
+
+/* Product imagery lifts gently on hover */
+.card-img {
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .card-img {
+  transform: scale(1.045);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-fade,
+  .animate-rise,
+  .animate-rise-1,
+  .animate-rise-2,
+  .animate-rise-3 {
+    animation: none;
+  }
+  .card-img {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
