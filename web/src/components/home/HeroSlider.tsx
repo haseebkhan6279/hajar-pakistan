@@ -95,21 +95,29 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
       {/* Copy */}
       <div className="absolute inset-x-0 bottom-0">
         <div className="mx-auto w-full max-w-[1500px] px-6 pb-14 md:px-12 md:pb-20">
-          <div key={slides[index].image} className="max-w-xl animate-rise">
+          <div className="max-w-xl animate-rise">
             <p className="text-[10px] uppercase tracking-[0.3em] text-hj-gold-soft drop-shadow-[0_2px_10px_rgba(10,10,10,0.7)]">
               {slides[index].eyebrow}
             </p>
             <h1 className="mt-4 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-light leading-[1.02] text-white drop-shadow-[0_2px_24px_rgba(10,10,10,0.5)]">
               {slides[index].headline}
             </h1>
-            <p className="mt-4 text-[11px] uppercase tracking-[0.28em] text-white/85 drop-shadow-[0_2px_12px_rgba(10,10,10,0.6)]">
-              {slides[index].kicker}
-            </p>
+            {slides[index].standfirst && (
+              <p className="mt-5 max-w-[36ch] text-[15px] leading-relaxed text-white/90 drop-shadow-[0_2px_12px_rgba(10,10,10,0.6)] md:text-base">
+                {slides[index].standfirst}
+              </p>
+            )}
+            <div key={slides[index].kicker} className="animate-rise">
+              <p className="mt-5 text-[11px] uppercase tracking-[0.28em] text-white/85 drop-shadow-[0_2px_12px_rgba(10,10,10,0.6)]">
+                {slides[index].kicker}
+              </p>
+            </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
+                key={slides[index].href}
                 href={slides[index].href}
-                className="inline-flex items-center border border-white bg-white px-8 py-4 text-[11px] uppercase tracking-[0.18em] text-hj-ink transition-colors duration-300 hover:border-hj-gold hover:bg-hj-gold hover:text-hj-ink"
+                className="animate-rise inline-flex items-center border border-white bg-white px-8 py-4 text-[11px] uppercase tracking-[0.18em] text-hj-ink transition-colors duration-300 hover:border-hj-gold hover:bg-hj-gold hover:text-hj-ink"
               >
                 {slides[index].cta}
               </Link>

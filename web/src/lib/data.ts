@@ -161,7 +161,7 @@ export const STORY: {
   standfirst: "Rooted in tradition. Designed for today.",
   intro: [
     "HAJAR was born from a love for Pakistani craftsmanship and a desire to bring its beauty into the modern wardrobe. Founded by designer Nazish Ali, the brand celebrates formal wear through thoughtful silhouettes, intricate details, and a contemporary interpretation of our cultural heritage.",
-    "At the heart of the house are two distinct expressions — HAJAR and HAJAR BY NAZISH ALI.",
+    "At the heart of HAJAR are two distinct expressions — HAJAR and HAJAR BY NAZISH ALI.",
   ],
   sections: [
     {
@@ -256,6 +256,8 @@ export type HeroSlide = {
   alt: string;
   eyebrow: string;
   headline: string;
+  /** The sentence under the headline. Optional — a slide can run on type alone. */
+  standfirst?: string;
   kicker: string;
   href: string;
   cta: string;
@@ -284,6 +286,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     alt: "Two models on a palace balcony at sunset, in Blush Hour and Moonlight Pearl",
     eyebrow: "Two expressions. One vision.",
     headline: "Heritage, reimagined.",
+    standfirst: "Pakistani craftsmanship shaped through a modern lens.",
     kicker: "HAJAR BY NAZISH ALI — Exclusive handcrafted formals",
     href: "/category/hajar-by-nazish-ali",
     cta: "Discover the signature line",
@@ -294,11 +297,12 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     image: "/media/hero-garden.jpg",
     alt: "Model in a lilac hand-embellished cape and gharara, in a garden courtyard",
-    eyebrow: "Pakistani craftsmanship, through a modern lens",
-    headline: "Refined formals, made for today",
-    kicker: "HAJAR — Refined formals · ZOUQ 2",
-    href: "/category/zouq-2",
-    cta: "Shop ZOUQ 2",
+    eyebrow: "Two expressions. One vision.",
+    headline: "Heritage, reimagined.",
+    standfirst: "Pakistani craftsmanship shaped through a modern lens.",
+    kicker: "HAJAR — Refined formals",
+    href: "/category/hajar",
+    cta: "Explore HAJAR",
     // 1600x1067 (1.50:1). A full-length fashion portrait: head at 5%, hem at
     // 95%. The band only ever shows ~58% of its height, so the whole look
     // cannot fit — `top` keeps the face and the bodice embroidery, which is
