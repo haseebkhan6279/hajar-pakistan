@@ -252,7 +252,7 @@ export function CategoriesPage() {
                   <div className="flex justify-end gap-4">
                     <button
                       type="button"
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
                       onClick={() => {
                         setEditing(c);
                         setCreating(false);
@@ -262,7 +262,7 @@ export function CategoriesPage() {
                     </button>
                     <button
                       type="button"
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
                       onClick={() => setDeleteId(c.id)}
                     >
                       Delete

@@ -138,7 +138,10 @@ export function ProductDetailClient({ product }: { product: Product }) {
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
       {/* Gallery */}
-      <div>
+      {/* min-w-0: a grid item defaults to min-width:auto, so without this the
+          thumbnail rail below sets the column to its min-content width and the
+          whole page scrolls sideways instead of the rail scrolling. */}
+      <div className="min-w-0">
         <div className="relative aspect-[3/4] overflow-hidden bg-hj-sand">
           <Image
             src={product.images[active]}
@@ -301,7 +304,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
               <button
                 type="button"
                 onClick={() => setOpenPanel("size")}
-                className="text-[10px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
+                className="tap-target text-[10px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
               >
                 Size guide
               </button>
@@ -369,7 +372,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
         <Link
           href="/contact"
-          className="mt-2 inline-block text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
+          className="tap-target mt-2 inline-block text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
         >
           Ask about this piece →
         </Link>

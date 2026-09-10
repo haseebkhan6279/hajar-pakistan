@@ -65,7 +65,7 @@ function ColumnHeading({ children }: { children: React.ReactNode }) {
 }
 
 const LINK =
-  "text-[13px] text-hj-muted transition-colors hover:text-hj-gold-deep";
+  "tap-target text-[13px] text-hj-muted transition-colors hover:text-hj-gold-deep";
 
 export function SiteFooter() {
   return (
@@ -121,7 +121,7 @@ export function SiteFooter() {
 
             <Link
               href="/contact"
-              className="mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-hj-gold-deep transition-colors hover:text-hj-ink"
+              className="tap-target mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-hj-gold-deep transition-colors hover:text-hj-ink"
             >
               Book an appointment
               <span aria-hidden>→</span>
@@ -153,7 +153,7 @@ export function SiteFooter() {
                   <li key={house.slug}>
                     <Link
                       href={categoryPath(house.slug)}
-                      className="text-[11px] uppercase tracking-[0.16em] text-hj-ink transition-colors hover:text-hj-gold-deep"
+                      className="tap-target text-[11px] uppercase tracking-[0.16em] text-hj-ink transition-colors hover:text-hj-gold-deep"
                     >
                       {house.name}
                     </Link>

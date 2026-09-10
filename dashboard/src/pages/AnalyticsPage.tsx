@@ -259,7 +259,7 @@ export function AnalyticsPage() {
           <button
             type="button"
             onClick={() => setShowTable((v) => !v)}
-            className="text-[11px] uppercase tracking-[0.12em] text-hj-gold-deep hover:underline"
+            className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-gold-deep hover:underline"
           >
             {showTable ? "Hide table" : "View as table"}
           </button>

@@ -355,7 +355,7 @@ export function InstagramPage() {
                     href={row.postUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 block truncate text-[11px] text-hj-gold-deep hover:underline"
+                    className="tap-target mt-1 block truncate py-1.5 text-[11px] text-hj-gold-deep hover:underline"
                   >
                     View on Instagram
                   </a>
@@ -368,7 +368,7 @@ export function InstagramPage() {
                       aria-label="Move earlier"
                       disabled={i === 0}
                       onClick={() => void move(i, -1)}
-                      className="px-1 text-xs text-hj-muted hover:text-hj-ink disabled:opacity-30"
+                      className="tap-target px-2.5 py-1.5 text-xs text-hj-muted hover:text-hj-ink disabled:opacity-30"
                     >
                       ←
                     </button>
@@ -377,7 +377,7 @@ export function InstagramPage() {
                       aria-label="Move later"
                       disabled={i === rows.length - 1}
                       onClick={() => void move(i, 1)}
-                      className="px-1 text-xs text-hj-muted hover:text-hj-ink disabled:opacity-30"
+                      className="tap-target px-2.5 py-1.5 text-xs text-hj-muted hover:text-hj-ink disabled:opacity-30"
                     >
                       →
                     </button>
@@ -386,21 +386,21 @@ export function InstagramPage() {
                     <button
                       type="button"
                       onClick={() => void togglePublished(row)}
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
                     >
                       {row.published ? "Hide" : "Show"}
                     </button>
                     <button
                       type="button"
                       onClick={() => openEdit(row)}
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
                     >
                       Edit
                     </button>
                     <button
                       type="button"
                       onClick={() => setDeleteId(row.id)}
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
                     >
                       Delete
                     </button>

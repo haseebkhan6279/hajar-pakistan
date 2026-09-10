@@ -34,7 +34,7 @@ export function PromoBanner() {
             // non-persistent dismissal is fine
           }
         }}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-lg leading-none text-hj-gold-soft/70 transition-colors hover:text-hj-gold-soft"
+        className="tap-target absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1 text-lg leading-none text-hj-gold-soft/70 transition-colors hover:text-hj-gold-soft"
       >
         ×
       </button>

@@ -17,7 +17,7 @@ export function Breadcrumbs({
               ) : (
                 <Link
                   href={item.href}
-                  className="transition-colors hover:text-hj-gold-deep"
+                  className="tap-target transition-colors hover:text-hj-gold-deep"
                 >
                   {item.name}
                 </Link>

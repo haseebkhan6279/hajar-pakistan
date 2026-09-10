@@ -187,7 +187,7 @@ export function ProductFormPage() {
         <div>
           <Link
             to="/products"
-            className="text-[11px] uppercase tracking-[0.14em] text-hj-muted hover:text-hj-ink"
+            className="tap-target text-[11px] uppercase tracking-[0.14em] text-hj-muted hover:text-hj-ink"
           >
             ← Products
           </Link>
@@ -362,7 +362,7 @@ export function ProductFormPage() {
                 </p>
                 <button
                   type="button"
-                  className="text-[11px] uppercase tracking-[0.12em] text-hj-gold-deep hover:underline"
+                  className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-gold-deep hover:underline"
                   onClick={() =>
                     set("colors", [
                       ...form.colors,
@@ -405,7 +405,7 @@ export function ProductFormPage() {
                     />
                     <button
                       type="button"
-                      className="px-2 text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
+                      className="tap-target px-2 text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
                       onClick={() =>
                         set(
                           "colors",
@@ -462,7 +462,7 @@ export function ProductFormPage() {
                   />
                   <button
                     type="button"
-                    className="px-2 text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
+                    className="tap-target px-2 text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
                     onClick={() =>
                       set(
                         "specifications",
@@ -477,7 +477,7 @@ export function ProductFormPage() {
             </ul>
             <button
               type="button"
-              className="text-[11px] uppercase tracking-[0.12em] text-hj-gold-deep hover:underline"
+              className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-gold-deep hover:underline"
               onClick={() =>
                 set("specifications", [
                   ...form.specifications,

@@ -189,3 +189,45 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* Touch targets.
+
+   Several controls here are deliberately small type — 10-11px uppercase with
+   wide tracking is the house voice, and padding them out to 44px would change
+   the design. On a touch screen those land as 16-20px tall hit areas, well
+   under the 24px WCAG 2.2 asks for and nowhere near the 44px a thumb wants.
+
+   This grows the *hit* area without touching layout: a transparent
+   pseudo-element centred on the control, at least 44px tall, painted over
+   nothing. Only on coarse pointers, so mouse hover targets stay as drawn.
+
+   Vertical only, deliberately. Widening it too made neighbouring narrow
+   buttons overlap — the instagram reorder arrows sit 18px apart, and a 44px
+   wide hit area on each meant the second one swallowed the first. Controls
+   that are genuinely too narrow get real padding instead.
+
+   It cannot help an element with overflow:hidden (Tailwind's `truncate`),
+   which clips its own pseudo-element — those need real padding too.
+
+   Why the layer: unlayered rules beat *everything* in Tailwind's layers no
+   matter how weak the selector, so an unlayered .tap-target{position:relative}
+   silently overrode .absolute and dropped the promo bar's dismiss button out
+   of its corner into the middle of the banner. In `components` it sits below
+   `utilities`, so any position utility on the element wins as it should. */
+@layer components {
+  @media (pointer: coarse) {
+    .tap-target {
+      position: relative;
+    }
+
+    .tap-target::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: max(100%, 44px);
+      transform: translateY(-50%);
+    }
+  }
+}

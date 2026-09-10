@@ -176,13 +176,13 @@ export function ProductsPage() {
                   <div className="flex justify-end gap-4">
                     <Link
                       to={`/products/${p.id}/edit`}
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-gold-deep"
                     >
                       Edit
                     </Link>
                     <button
                       type="button"
-                      className="text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
+                      className="tap-target text-[11px] uppercase tracking-[0.12em] text-hj-muted hover:text-hj-danger"
                       onClick={() => setDeleteId(p.id)}
                     >
                       Delete

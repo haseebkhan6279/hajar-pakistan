@@ -137,7 +137,7 @@ export function CollectionTabs({ tabs }: { tabs: CollectionTab[] }) {
         <div className="flex items-center gap-4">
           <Link
             href={current.href}
-            className="text-[11px] uppercase tracking-[0.16em] text-hj-gold-deep transition-colors hover:text-hj-ink"
+            className="tap-target text-[11px] uppercase tracking-[0.16em] text-hj-gold-deep transition-colors hover:text-hj-ink"
           >
             View all {current.total} &rarr;
           </Link>
