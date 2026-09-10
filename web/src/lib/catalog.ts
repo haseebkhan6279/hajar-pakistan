@@ -30,9 +30,16 @@ export type CatalogProduct = {
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL?.trim() || "http://localhost:3000/api";
 
-/** Neutral stand-in so a product without imagery never breaks a grid. */
-export const PLACEHOLDER_IMAGE =
-  "https://placehold.co/900x1200/f4eee2/8a6a18?text=HAJAR";
+/**
+ * Neutral stand-in so a piece without imagery never breaks a grid.
+ *
+ * Served from /public rather than a placeholder service. The previous one was
+ * placehold.co, which answers with image/svg+xml — and next/image refuses SVG
+ * unless dangerouslyAllowSVG is set, so every fallback image on the site came
+ * back as 400 INVALID_IMAGE_OPTIMIZE_REQUEST and rendered as a broken icon.
+ * A local JPEG also removes a third-party host from the render path.
+ */
+export const PLACEHOLDER_IMAGE = "/media/placeholder.jpg";
 
 /**
  * Short display reference built from the slug. Cuts on a word boundary so it

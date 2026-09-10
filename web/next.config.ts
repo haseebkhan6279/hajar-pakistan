@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "cdn.shopify.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "placehold.co" },
       // Instagram tiles imported from a post link, before they are mirrored
       // into Cloudinary — these URLs are signed and eventually expire
       { protocol: "https", hostname: "**.fbcdn.net" },
