@@ -6,12 +6,16 @@ then set Root Directory in the import screen.
 
 | Project        | Root Directory | Framework Preset | Notes                        |
 | -------------- | -------------- | ---------------- | ---------------------------- |
-| `hajar-api`    | `api`          | Other            | NestJS as a serverless function |
+| `hajar-api`    | `api`          | **NestJS**       | Detected automatically       |
 | `hajar-web`    | `web`          | Next.js          | Storefront                   |
 | `hajar-dashboard` | `dashboard` | Vite             | Admin SPA                    |
 
 Vercel detects the npm workspace lockfile at the repo root on its own; leave
 Install and Build commands at their defaults.
+
+Leave the API's Framework Preset on auto-detect (it resolves to NestJS). Do
+**not** set it to "Other" — that turns off the zero-config path described
+below and the deploy will not find an entrypoint.
 
 ## Deploy the API first — this order is not optional
 
@@ -121,12 +125,28 @@ so the file never passes through the API — a real feature, not a config change
 
 ## What runs where
 
-`api/api/[[...slug]].ts` is the Vercel entry: an optional catch-all, so Vercel
-routes every `/api/*` request to it natively without a rewrite, and the function
-sees the original path. It calls `app.init()` rather than `app.listen()` and
-caches the bootstrap *promise* at module scope, so concurrent requests during a
-cold start share one Nest app and one Mongo pool.
+There is one entrypoint, `api/src/main.ts`, and it is an ordinary listening
+Nest server. Vercel detects NestJS from that path, builds the whole app into a
+single Function and runs it on Fluid compute, so the same file serves local
+development and production with nothing Vercel-specific in it.
 
-`src/main.ts` is still the long-running server for local development and for any
-host that wants a real process. Both call `configureApp()` from `src/setup.ts`,
-so prefix, validation and CORS cannot drift apart.
+`api/` therefore has **no vercel.json**. That is deliberate, not an oversight.
+An earlier version of this setup hand-rolled a catch-all serverless handler at
+`api/api/[[...slug]].ts` with an accompanying `vercel.json` that set
+`outputDirectory: "public"`. Vercel's NestJS detection then looked for the
+server entrypoint *inside* `public/` and the build failed with:
+
+    Error: No entrypoint found in output directory: "public"
+
+If that error comes back, something has reintroduced an `outputDirectory` or a
+Framework Preset override on the API project.
+
+Two things in the code do still care that production is serverless, and should
+stay:
+
+- `src/app.module.ts` narrows the Mongo pool and shortens the server-selection
+  timeout when `process.env.VERCEL` is set. Many short-lived instances against
+  an Atlas M0's 500-connection cap is the case being avoided.
+- `SEED_ON_BOOT=false` keeps the boot seeder out of cold starts, where it would
+  charge a bcrypt hash and five writes to whichever request warmed the
+  instance. Seed from your machine instead (see above).
