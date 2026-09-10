@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../lib/auth";
+import { api } from "../lib/api";
+import { type AdminOrder } from "../lib/data";
 import { Wordmark } from "../components/Logo";
 
 const NAV = [
@@ -15,6 +18,20 @@ const NAV = [
 
 export function AdminLayout() {
   const { signOut, email } = useAuth();
+
+  /**
+   * Orders still waiting on someone, shown against the nav item so the count
+   * is visible from any page. Shares the ["orders"] cache with the overview
+   * and the orders page, so this costs no extra request once any of them has
+   * loaded, and a status change there updates the badge here.
+   */
+  const orders = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => (await api.get<AdminOrder[]>("/orders")).data,
+  });
+  const pendingOrders = (orders.data ?? []).filter(
+    (o) => o.status === "pending"
+  ).length;
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -49,7 +66,17 @@ export function AdminLayout() {
                   {isActive && (
                     <span className="absolute inset-y-1.5 left-0 w-0.5 bg-hj-gold" />
                   )}
-                  {item.label}
+                  <span className="flex items-center justify-between gap-2">
+                    {item.label}
+                    {item.to === "/orders" && pendingOrders > 0 && (
+                      <span
+                        aria-label={`${pendingOrders} pending`}
+                        className="min-w-[20px] rounded-full bg-hj-gold-deep px-1.5 py-0.5 text-center text-[10px] font-medium leading-4 text-white"
+                      >
+                        {pendingOrders}
+                      </span>
+                    )}
+                  </span>
                 </>
               )}
             </NavLink>
