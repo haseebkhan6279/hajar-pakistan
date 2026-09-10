@@ -6,6 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { LogoMark } from "@/components/Brand";
 import { useCart } from "@/components/cart/CartProvider";
 import { CurrencySwitcher } from "@/components/currency/CurrencySwitcher";
+import { useCurrency } from "@/components/currency/CurrencyProvider";
+import { CURRENCIES } from "@/lib/currency";
 import { childCollections, HOUSES } from "@/lib/data";
 import { cn } from "@/lib/clsx";
 
@@ -37,11 +39,36 @@ export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { count, openCart } = useCart();
+  const { code: currency, setCode: setCurrency } = useCurrency();
   const [scrolled, setScrolled] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState("");
+
+  /** A tap on any drawer link navigates; the drawer has to follow it shut. */
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  /**
+   * While the drawer is open the page behind it must not scroll — on iOS a
+   * drag over the overlay otherwise moves the page underneath and the drawer
+   * appears stuck. Escape closes it, as with any other modal surface.
+   */
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   /**
    * Two thresholds: the hairline and shadow appear as soon as the page moves,
@@ -104,8 +131,11 @@ export function SiteHeader() {
             aria-label="HAJAR — home"
             className="flex items-center gap-3 md:gap-4"
           >
-            <LogoMark size={42} />
-            <span className="font-display text-[26px] font-medium leading-none tracking-brand text-hj-ink md:text-[34px]">
+            <LogoMark size={44} />
+            {/* The roundel already carries the name. On a phone the wordmark
+                beside it crowds the row against the menu and bag controls, so
+                only the mark shows; the link keeps its aria-label. */}
+            <span className="hidden font-display text-[26px] font-medium leading-none tracking-brand text-hj-ink md:inline md:text-[34px]">
               HAJAR
             </span>
           </Link>
@@ -277,77 +307,168 @@ export function SiteHeader() {
         </div>
       )}
 
-      {/* Mobile drawer */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <button
-            type="button"
-            aria-label="Close menu"
-            className="absolute inset-0 bg-hj-ink/40"
-            onClick={() => setMenuOpen(false)}
-          />
-          <div className="absolute inset-y-0 left-0 flex w-[86%] max-w-sm flex-col bg-white">
-            <div className="flex h-[64px] items-center justify-between border-b border-hj-border px-5">
-              <span className="font-display text-2xl tracking-brand text-hj-ink">
+      {/*
+        Mobile drawer.
+
+        Always mounted so it can slide rather than appear. `invisible` is what
+        keeps it out of the tab order while closed, and because visibility is
+        transitioned it flips only after the slide-out finishes.
+      */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 transition-[visibility] duration-300 lg:hidden",
+          menuOpen ? "visible" : "invisible pointer-events-none"
+        )}
+      >
+        <button
+          type="button"
+          aria-label="Close menu"
+          tabIndex={menuOpen ? 0 : -1}
+          onClick={() => setMenuOpen(false)}
+          className={cn(
+            "absolute inset-0 bg-hj-ink/45 backdrop-blur-[2px] transition-opacity duration-300",
+            menuOpen ? "opacity-100" : "opacity-0"
+          )}
+        />
+
+        <aside
+          aria-label="Menu"
+          className={cn(
+            "absolute inset-y-0 left-0 flex w-[88%] max-w-[380px] flex-col bg-hj-canvas shadow-[0_0_60px_rgb(10_10_10/0.25)] transition-transform duration-300 ease-out",
+            menuOpen ? "translate-x-0" : "-translate-x-full"
+          )}
+        >
+          <div className="flex h-[64px] shrink-0 items-center justify-between border-b border-hj-border pl-5 pr-2">
+            <Link
+              href="/"
+              aria-label="HAJAR — home"
+              className="flex items-center gap-2.5"
+            >
+              <LogoMark size={32} />
+              <span className="font-display text-xl tracking-brand text-hj-ink">
                 HAJAR
               </span>
-              <button
-                type="button"
-                aria-label="Close menu"
-                className="text-2xl leading-none text-hj-muted"
-                onClick={() => setMenuOpen(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="flex items-center justify-between border-b border-hj-border px-5 py-3">
-              <span className="text-[11px] uppercase tracking-[0.16em] text-hj-muted">
-                Currency
-              </span>
-              <CurrencySwitcher />
-            </div>
+            </Link>
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+              className="flex h-11 w-11 items-center justify-center text-hj-muted transition-colors hover:text-hj-ink"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path d="m2 2 12 12M14 2 2 14" stroke="currentColor" strokeWidth="1.2" />
+              </svg>
+            </button>
+          </div>
 
-            <nav className="flex flex-col overflow-y-auto px-5 py-4">
-              <Link
-                href="/products"
-                className="border-b border-hj-border py-4 text-[13px] uppercase tracking-[0.14em] text-hj-ink"
-              >
-                Shop all
-              </Link>
-              {NAV.map((item) => (
-                <div key={item.href} className="border-b border-hj-border">
-                  <Link
-                    href={item.href}
-                    className="block py-4 text-[13px] uppercase tracking-[0.14em] text-hj-ink"
-                  >
-                    {item.label}
-                  </Link>
-                  {item.children && (
-                    <ul className="-mt-1 pb-3 pl-4">
-                      {item.children.map((child) => (
-                        <li key={child.href}>
-                          <Link
-                            href={child.href}
-                            className="block py-2 text-[12px] uppercase tracking-[0.14em] text-hj-muted"
-                          >
-                            {child.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </nav>
-            <div className="mt-auto border-t border-hj-border px-5 py-5">
-              <p className="eyebrow">Made in Lahore</p>
-              <p className="mt-2 text-sm text-hj-muted">
-                Made to order · worldwide shipping.
+          <nav className="flex-1 overflow-y-auto overscroll-contain">
+            <ul className="px-2 py-3">
+              {[{ href: "/products", label: "Shop all", match: "/products" }, ...NAV].map(
+                (item) => {
+                  const children = "children" in item ? item.children : undefined;
+                  const active =
+                    pathname === item.match ||
+                    pathname.startsWith(`${item.match}/`);
+                  return (
+                    <li key={item.label}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "relative flex items-center px-4 py-3.5 font-display text-[19px] transition-colors",
+                          active
+                            ? "text-hj-gold-deep"
+                            : "text-hj-ink hover:text-hj-gold-deep"
+                        )}
+                      >
+                        {active && (
+                          <span className="absolute inset-y-2.5 left-0 w-0.5 bg-hj-gold" />
+                        )}
+                        {item.label}
+                      </Link>
+
+                      {children && (
+                        <ul className="flex flex-wrap gap-2 px-4 pb-3.5">
+                          {children.map((child) => {
+                            const on = pathname.startsWith(child.href);
+                            return (
+                              <li key={child.href}>
+                                <Link
+                                  href={child.href}
+                                  className={cn(
+                                    "flex h-9 items-center border px-3.5 text-[11px] uppercase tracking-[0.14em] transition-colors",
+                                    on
+                                      ? "border-hj-gold bg-hj-gold-wash text-hj-gold-deep"
+                                      : "border-hj-border text-hj-ink-soft hover:border-hj-gold-soft"
+                                  )}
+                                >
+                                  {child.label}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                }
+              )}
+            </ul>
+
+            {/*
+              Currency as chips, not the header's dropdown. That control opens
+              an absolutely positioned panel, which inside a drawer floats over
+              the links it is supposed to sit among; six codes fit on two rows
+              and every one is a 44px target.
+            */}
+            <div className="border-t border-hj-border px-6 py-5">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-hj-muted">
+                Currency
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {CURRENCIES.map((c) => {
+                  const on = c.code === currency;
+                  return (
+                    <button
+                      key={c.code}
+                      type="button"
+                      onClick={() => setCurrency(c.code)}
+                      aria-pressed={on}
+                      className={cn(
+                        "h-11 min-w-[62px] border px-3 text-[11px] tracking-[0.12em] transition-colors",
+                        on
+                          ? "border-hj-gold bg-hj-gold-wash text-hj-gold-deep"
+                          : "border-hj-border text-hj-ink-soft hover:border-hj-gold-soft"
+                      )}
+                    >
+                      {c.code}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-3 text-[11px] leading-relaxed text-hj-muted">
+                Orders are placed and settled in PKR. Other currencies are
+                indicative only.
               </p>
             </div>
+          </nav>
+
+          <div className="shrink-0 border-t border-hj-border bg-hj-cream px-6 py-5">
+            <Link
+              href="/contact"
+              className="flex h-12 w-full items-center justify-center bg-hj-ink text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink"
+            >
+              Book an appointment
+            </Link>
+            <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-hj-muted">
+              Made in Lahore
+            </p>
+            <p className="mt-1.5 text-[13px] text-hj-ink-soft">
+              Made to order · worldwide shipping
+            </p>
           </div>
-        </div>
-      )}
+        </aside>
+      </div>
+
     </header>
   );
 }
