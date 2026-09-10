@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/clsx";
 
 /**
  * Full-bleed campaign film.
@@ -11,6 +10,15 @@ import { cn } from "@/lib/clsx";
  * fetched until the band scrolls into view, and playback stops again once it
  * leaves. Muted + playsInline so mobile browsers will autoplay it at all, and a
  * visible pause control because it starts on its own (WCAG 2.2.2).
+ *
+ * The mp4 itself must stay faststart — moov atom ahead of mdat. Encoded the
+ * other way round, Safari cannot begin until it has downloaded all 6.8 MB,
+ * which on an iPhone reads as the film simply not loading. If this file is
+ * ever re-exported, run it through `ffmpeg -i in.mp4 -c copy -movflags
+ * +faststart out.mp4` before committing it.
+ *
+ * The poster is a real frame from the film, so the band shows the shot while
+ * the video is still arriving rather than an empty panel.
  */
 export function CampaignVideo({
   src = "/media/hajar-campaign.mp4",
@@ -29,7 +37,6 @@ export function CampaignVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const [loaded, setLoaded] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [reduced, setReduced] = useState(false);
 
@@ -108,15 +115,13 @@ export function CampaignVideo({
         loop
         playsInline
         preload="none"
+        poster="/media/campaign-poster.jpg"
         aria-label={`${title} campaign film`}
-        onLoadedData={() => setLoaded(true)}
-        className={cn(
-          /* Centred, deliberately: the letterbox bars are symmetric, so an
-             even crop takes the same amount off each one. Anchoring this to
-             the top is what put a black band across the section. */
-          "absolute inset-0 h-full w-full object-cover transition-opacity duration-1000",
-          loaded ? "opacity-100" : "opacity-0"
-        )}
+        /* Centred, deliberately: the letterbox bars are symmetric, so an even
+           crop takes the same amount off each one. Anchoring this to the top is
+           what put a black band across the section. The poster is drawn with
+           the same object-fit, so it crops identically. */
+        className="absolute inset-0 h-full w-full object-cover"
       />
 
       {/* Scrim weighted to the left, where the type sits */}
