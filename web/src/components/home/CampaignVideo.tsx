@@ -47,6 +47,7 @@ export function CampaignVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const inView = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [reduced, setReduced] = useState(false);
   /**
@@ -72,6 +73,7 @@ export function CampaignVideo({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        inView.current = entry.isIntersecting;
         if (entry.isIntersecting) {
           if (!video.src) video.src = source;
           void video.play().then(
@@ -86,8 +88,22 @@ export function CampaignVideo({
       { threshold: 0.25 }
     );
 
+    const retry = () => {
+      if (!inView.current) return;
+      void video.play().then(
+        () => setPlaying(true),
+        () => setPlaying(false)
+      );
+    };
+    video.addEventListener("canplay", retry);
+    video.addEventListener("loadeddata", retry);
+
     observer.observe(section);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      video.removeEventListener("canplay", retry);
+      video.removeEventListener("loadeddata", retry);
+    };
   }, [source, reduced]);
 
   function toggle() {
@@ -170,12 +186,17 @@ export function CampaignVideo({
         </div>
       </div>
 
-      {/* Autoplaying media needs a visible control */}
+      {/*
+        Hidden by request — the film is decorative and the control was reading
+        as page furniture over the photography. It is not removed: motion that
+        starts on its own still needs a way to stop it (WCAG 2.2.2), so the
+        button stays in the DOM and appears on keyboard focus.
+      */}
       <button
         type="button"
         onClick={toggle}
         aria-label={playing ? "Pause the film" : "Play the film"}
-        className="absolute bottom-6 right-6 z-10 flex h-11 w-11 items-center justify-center border border-white/40 text-white/80 backdrop-blur-sm transition-colors hover:border-white hover:text-white"
+        className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:bottom-6 focus-visible:right-6 focus-visible:z-10 focus-visible:flex focus-visible:h-11 focus-visible:w-11 focus-visible:items-center focus-visible:justify-center focus-visible:border focus-visible:border-white focus-visible:text-white focus-visible:backdrop-blur-sm"
       >
         {playing ? (
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>

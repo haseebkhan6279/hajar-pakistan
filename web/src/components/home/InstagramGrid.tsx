@@ -174,6 +174,9 @@ export function InstagramGrid({ posts }: { posts: InstagramPost[] }) {
         className={cn(
           "mx-auto mt-11 grid gap-3 px-4 md:gap-4 md:px-8",
           "max-w-[1500px]",
+          // Six on a phone, the lot from md up. Hidden rather than sliced so
+          // the markup stays the same at every width.
+          "[&>li:nth-child(n+7)]:hidden md:[&>li:nth-child(n+7)]:block",
           columnsFor(shown.length)
         )}
       >

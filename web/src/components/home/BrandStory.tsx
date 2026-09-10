@@ -23,7 +23,7 @@ export function BrandStory() {
             </span>
           </h2>
           <div className="rule-gold mx-auto mt-7 h-px w-24" />
-          <p className="mx-auto mt-7 max-w-[52ch] text-[17px] leading-relaxed text-hj-ink-soft">
+          <p className="mx-auto mt-7 hidden max-w-[52ch] text-[17px] leading-relaxed text-hj-ink-soft md:block">
             {BRAND_STORY.lede}
           </p>
         </header>
@@ -50,7 +50,10 @@ export function BrandStory() {
                 <p className="mt-3 font-display text-lg italic text-hj-gold-deep">
                   {expression.tagline}
                 </p>
-                <p className="mt-4 text-[15px] leading-relaxed text-hj-muted">
+                {/* The full description lives on /about. On a phone this
+                    band was three screens of prose before the first product;
+                    the name and tagline are enough to choose a house. */}
+                <p className="mt-4 hidden text-[15px] leading-relaxed text-hj-muted md:block">
                   {expression.body}
                 </p>
               </Link>
@@ -59,7 +62,7 @@ export function BrandStory() {
         </div>
 
         <div className="mx-auto mt-14 max-w-[62ch] border-t border-hj-border pt-10 text-center">
-          <p className="text-[15px] leading-relaxed text-hj-muted">
+          <p className="hidden text-[15px] leading-relaxed text-hj-muted md:block">
             {BRAND_STORY.closer}
           </p>
           <p className="mt-6 font-display text-xl italic text-hj-ink">

@@ -90,7 +90,7 @@ export function CollectionTabs({ tabs }: { tabs: CollectionTab[] }) {
       <div
         role="tablist"
         aria-label="Collections"
-        className="mx-auto mt-9 flex max-w-[1500px] flex-wrap items-end justify-center gap-x-9 gap-y-3 border-b border-hj-border px-4 md:gap-x-14 md:px-8"
+        className="scrollbar-none mx-auto mt-8 flex max-w-[1500px] snap-x snap-mandatory items-end gap-x-7 overflow-x-auto border-b border-hj-border px-4 md:mt-9 md:flex-wrap md:justify-center md:gap-x-14 md:overflow-visible md:px-8"
       >
         {tabs.map((tab, i) => (
           <button
@@ -107,7 +107,7 @@ export function CollectionTabs({ tabs }: { tabs: CollectionTab[] }) {
             onClick={() => setActive(i)}
             onKeyDown={(e) => onTabKey(e, i)}
             className={cn(
-              "relative -mb-px whitespace-nowrap pb-3.5 text-[11px] uppercase tracking-[0.18em] transition-colors md:text-[12px]",
+              "relative -mb-px shrink-0 snap-start whitespace-nowrap pb-3.5 pt-1 text-[11px] uppercase tracking-[0.16em] transition-colors md:tracking-[0.18em] md:text-[12px]",
               i === active ? "text-hj-ink" : "text-hj-muted hover:text-hj-ink"
             )}
           >
@@ -131,7 +131,9 @@ export function CollectionTabs({ tabs }: { tabs: CollectionTab[] }) {
           <span className="font-display text-lg italic text-hj-gold-deep">
             {current.tagline}
           </span>{" "}
-          {current.blurb}
+          {/* The longer blurb is on the collection page itself; here it pushed
+              the products a screen further down on a phone. */}
+          <span className="hidden md:inline">{current.blurb}</span>
         </p>
 
         <div className="flex items-center gap-4">

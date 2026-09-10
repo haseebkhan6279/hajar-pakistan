@@ -113,7 +113,7 @@ export function Atelier({
                   <h3 className="text-[11px] uppercase tracking-[0.18em] text-hj-ink">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-hj-muted">
+                  <p className="mt-2 hidden text-[15px] leading-relaxed text-hj-muted md:block">
                     {step.body}
                   </p>
                 </div>

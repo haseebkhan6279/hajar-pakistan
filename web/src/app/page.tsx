@@ -234,7 +234,7 @@ export default async function HomePage() {
           pinned to the bottom with mt-auto so three excerpts of different
           lengths still end level with each other.
         */}
-        <div className="mx-auto mt-14 grid max-w-[1400px] gap-x-10 gap-y-12 px-4 md:grid-cols-3 md:px-8">
+        <div className="mx-auto mt-14 grid max-w-[1400px] gap-x-10 gap-y-12 px-4 [&>a:nth-child(n+3)]:hidden md:grid-cols-3 md:px-8 md:[&>a:nth-child(n+3)]:flex">
           {JOURNAL.map((post) => (
             <Link
               key={post.slug}
@@ -249,7 +249,7 @@ export default async function HomePage() {
                 {post.title}
               </h3>
 
-              <p className="mt-3.5 text-sm leading-relaxed text-hj-muted">
+              <p className="mt-3.5 hidden text-sm leading-relaxed text-hj-muted md:block">
                 {post.excerpt}
               </p>
 
