@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api } from "../lib/api";
+import { api, uploadErrorMessage } from "../lib/api";
 
 export function ImageUploader({
   images,
@@ -36,8 +36,8 @@ export function ImageUploader({
         uploaded.push(data.url);
       }
       onChange([...images, ...uploaded]);
-    } catch {
-      setError("Upload failed — check the Cloudinary keys in api/.env");
+    } catch (err) {
+      setError(uploadErrorMessage(err));
     } finally {
       setUploading(false);
     }
@@ -106,14 +106,14 @@ export function ImageUploader({
                 <button
                   type="button"
                   aria-label="Move left"
-                  className="px-1 text-xs text-hj-muted hover:text-hj-ink"
+                  className="tap-target px-2.5 py-1.5 text-xs text-hj-muted hover:text-hj-ink"
                   onClick={() => move(i, i - 1)}
                 >
                   ←
                 </button>
                 <button
                   type="button"
-                  className="text-[11px] text-hj-muted hover:text-hj-danger"
+                  className="tap-target text-[11px] text-hj-muted hover:text-hj-danger"
                   onClick={() => onChange(images.filter((_, idx) => idx !== i))}
                 >
                   Remove
@@ -121,7 +121,7 @@ export function ImageUploader({
                 <button
                   type="button"
                   aria-label="Move right"
-                  className="px-1 text-xs text-hj-muted hover:text-hj-ink"
+                  className="tap-target px-2.5 py-1.5 text-xs text-hj-muted hover:text-hj-ink"
                   onClick={() => move(i, i + 1)}
                 >
                   →

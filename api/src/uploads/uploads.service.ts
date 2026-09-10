@@ -1,18 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
 import { UPLOAD_FOLDER } from '../common/brand';
 
 export type UploadKind = 'image' | 'video';
 
+/**
+ * File storage, when it is switched on.
+ *
+ * Cloudinary is optional: the keys may simply be absent, and the API still has
+ * to boot without them — reading them with getOrThrow here would take the whole
+ * process down at startup over a feature nobody has asked for yet. Instead the
+ * service reports itself unconfigured and refuses the individual request, which
+ * the Instagram importer already treats as "keep the original URL".
+ *
+ * To switch it on: set the three CLOUDINARY_* variables and redeploy.
+ */
 @Injectable()
 export class UploadsService {
+  private readonly logger = new Logger(UploadsService.name);
+  readonly isConfigured: boolean;
+
   constructor(config: ConfigService) {
-    cloudinary.config({
-      cloud_name: config.getOrThrow('CLOUDINARY_CLOUD_NAME'),
-      api_key: config.getOrThrow('CLOUDINARY_API_KEY'),
-      api_secret: config.getOrThrow('CLOUDINARY_API_SECRET'),
-    });
+    const cloudName = config.get<string>('CLOUDINARY_CLOUD_NAME')?.trim();
+    const apiKey = config.get<string>('CLOUDINARY_API_KEY')?.trim();
+    const apiSecret = config.get<string>('CLOUDINARY_API_SECRET')?.trim();
+
+    this.isConfigured = Boolean(cloudName && apiKey && apiSecret);
+
+    if (this.isConfigured) {
+      cloudinary.config({
+        cloud_name: cloudName,
+        api_key: apiKey,
+        api_secret: apiSecret,
+      });
+    } else {
+      this.logger.warn(
+        'CLOUDINARY_* not set — file uploads are disabled and will return 503',
+      );
+    }
   }
 
   /**
@@ -24,7 +50,13 @@ export class UploadsService {
     buffer: Buffer,
     folder = UPLOAD_FOLDER,
     kind: UploadKind = 'image',
-  ) {
+  ): Promise<{ url: string; publicId: string }> {
+    if (!this.isConfigured) {
+      throw new ServiceUnavailableException(
+        'File uploads are not configured on this server.',
+      );
+    }
+
     return new Promise<{ url: string; publicId: string }>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         { folder, resource_type: kind },

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api } from "../lib/api";
+import { api, uploadErrorMessage } from "../lib/api";
 
 /** Mirrors MAX_VIDEO_BYTES in api/src/uploads/uploads.controller.ts. */
 const MAX_VIDEO_BYTES = 40 * 1024 * 1024;
@@ -47,8 +47,8 @@ export function VideoUploader({
         headers: { "Content-Type": "multipart/form-data" },
       });
       onChange(data.url);
-    } catch {
-      setError("Upload failed — check the Cloudinary keys in api/.env");
+    } catch (err) {
+      setError(uploadErrorMessage(err));
     } finally {
       setUploading(false);
     }
