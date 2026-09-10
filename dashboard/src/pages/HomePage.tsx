@@ -5,6 +5,7 @@ import {
   formatDate,
   formatPrice,
   type AdminCategory,
+  type AdminInquiry,
   type AdminOrder,
   type AdminProduct,
 } from "../lib/data";
@@ -20,6 +21,11 @@ const SHORTCUTS = [
     to: "/orders",
     title: "Orders",
     desc: "Cash-on-delivery bookings with full customer details.",
+  },
+  {
+    to: "/inquiries",
+    title: "Enquiries",
+    desc: "Appointment requests and questions from the contact form.",
   },
   {
     to: "/categories",
@@ -41,6 +47,10 @@ export function HomePage() {
     queryKey: ["categories"],
     queryFn: async () => (await api.get<AdminCategory[]>("/categories")).data,
   });
+  const inquiries = useQuery({
+    queryKey: ["inquiries"],
+    queryFn: async () => (await api.get<AdminInquiry[]>("/inquiries")).data,
+  });
 
   const rows = products.data ?? [];
   const orderRows = orders.data ?? [];
@@ -56,6 +66,9 @@ export function HomePage() {
   const revenue = orderRows
     .filter((o) => o.status !== "cancelled")
     .reduce((sum, o) => sum + o.total, 0);
+
+  const inquiryRows = inquiries.data ?? [];
+  const newInquiries = inquiryRows.filter((i) => i.status === "new").length;
 
   const loading = products.isLoading || orders.isLoading;
 
@@ -76,7 +89,7 @@ export function HomePage() {
         </p>
       </header>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <StatCard
           label="Published"
           value={String(published)}
@@ -94,6 +107,12 @@ export function HomePage() {
           hint="Excludes cancelled"
         />
         <StatCard
+          label="New enquiries"
+          value={String(newInquiries)}
+          hint={`${inquiryRows.length} in the inbox`}
+          tone={newInquiries > 0 ? "gold" : "default"}
+        />
+        <StatCard
           label="Needs restock"
           value={String(lowStock.length + outOfStock)}
           hint={`${outOfStock} out of stock`}
@@ -101,7 +120,7 @@ export function HomePage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {SHORTCUTS.map((s) => (
           <Link
             key={s.to}
@@ -125,7 +144,7 @@ export function HomePage() {
             <h2 className="font-display text-xl text-hj-ink">Latest orders</h2>
             <Link
               to="/orders"
-              className="text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
+              className="tap-target text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
             >
               All orders
             </Link>
@@ -165,7 +184,7 @@ export function HomePage() {
             <h2 className="font-display text-xl text-hj-ink">Low stock</h2>
             <Link
               to="/products"
-              className="text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
+              className="tap-target text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
             >
               All products
             </Link>

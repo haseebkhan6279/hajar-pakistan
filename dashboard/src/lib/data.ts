@@ -151,3 +151,40 @@ export type AdminInstagramPost = {
   sortOrder: number;
   published: boolean;
 };
+
+export type InquiryStatus = "new" | "read" | "replied" | "closed";
+
+export const INQUIRY_STATUSES: InquiryStatus[] = [
+  "new",
+  "read",
+  "replied",
+  "closed",
+];
+
+export type AdminInquiry = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+  status: InquiryStatus;
+  source: string;
+  adminNote: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+/**
+ * Digits only, with the leading 0 of a local Pakistani number swapped for the
+ * country code — wa.me rejects anything else.
+ */
+export function whatsappHref(phone: string, text?: string) {
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return "";
+  const international = digits.startsWith("0")
+    ? `92${digits.slice(1)}`
+    : digits;
+  const query = text ? `?text=${encodeURIComponent(text)}` : "";
+  return `https://wa.me/${international}${query}`;
+}

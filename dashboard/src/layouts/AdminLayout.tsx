@@ -6,6 +6,7 @@ import { Wordmark } from "../components/Logo";
 const NAV = [
   { to: "/", label: "Overview", end: true },
   { to: "/orders", label: "Orders" },
+  { to: "/inquiries", label: "Enquiries" },
   { to: "/products", label: "Products" },
   { to: "/categories", label: "Collections" },
   { to: "/instagram", label: "Instagram" },
@@ -85,7 +86,7 @@ export function AdminLayout() {
         <header className="flex h-16 items-center justify-between border-b border-hj-border bg-white px-4 md:px-8">
           <button
             type="button"
-            className="text-sm text-hj-muted md:hidden"
+            className="tap-target text-sm text-hj-muted md:hidden"
             onClick={() => setMobileOpen(true)}
           >
             Menu
@@ -97,7 +98,7 @@ export function AdminLayout() {
             href="http://localhost:3001"
             target="_blank"
             rel="noreferrer"
-            className="text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
+            className="tap-target text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
           >
             View storefront ↗
           </a>

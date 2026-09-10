@@ -9,6 +9,7 @@ import { ProductFormPage } from "./pages/ProductFormPage";
 import { CategoriesPage } from "./pages/CategoriesPage";
 import { InstagramPage } from "./pages/InstagramPage";
 import { OrdersPage } from "./pages/OrdersPage";
+import { InquiriesPage } from "./pages/InquiriesPage";
 import { AnalyticsPage } from "./pages/AnalyticsPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
@@ -33,6 +34,7 @@ export default function App() {
         >
           <Route index element={<HomePage />} />
           <Route path="orders" element={<OrdersPage />} />
+          <Route path="inquiries" element={<InquiriesPage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/new" element={<ProductFormPage />} />
           <Route path="products/:id/edit" element={<ProductFormPage />} />
