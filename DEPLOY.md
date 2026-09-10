@@ -38,7 +38,7 @@ and Development unless noted.
 | `ADMIN_EMAIL` | Dashboard login |
 | `ADMIN_PASSWORD` | Dashboard password — see caveat below |
 | `SEED_ON_BOOT` | `false` |
-| `CORS_ORIGIN` | `https://<web-domain>,https://<dashboard-domain>` (comma separated, no spaces) |
+| `CORS_ORIGIN` | Your domains **plus the localhost entries** — see below |
 
 `PORT` is not used on Vercel; the platform owns the socket.
 
@@ -67,12 +67,28 @@ npm run sync:collections -w api   # push brand copy onto the collection rows
 Both are baked in at build time, not read at runtime. Changing either means
 redeploying that project.
 
-## After the domains are attached
+## CORS
 
-`CORS_ORIGIN` must list the final domains. Until then the API also accepts any
-`*.vercel.app` origin (see `src/setup.ts`), which is what makes preview
-deployments work — but a custom domain is not covered by that and will be
-blocked until you add it.
+`CORS_ORIGIN` is a comma separated list with no spaces:
+
+```
+https://hajar.pk,https://www.hajar.pk,http://localhost:3001,http://localhost:5173,http://127.0.0.1:3001,http://127.0.0.1:5173
+```
+
+The localhost entries belong in production too. They are what lets you point a
+dashboard or storefront running on your own machine at the deployed API, which
+is the quickest way to check something against real data. `localhost` and
+`127.0.0.1` are *different origins* to a browser — it sends whatever is in the
+address bar — so both forms are listed.
+
+That is a deliberate, small trade: only a page actually served from localhost
+carries a localhost `Origin`, so an ordinary malicious site cannot use these
+entries. Auth is a bearer token read from localStorage, which is per-origin,
+so a page on localhost cannot read the deployed dashboard's token either.
+
+Preview deployments need nothing added — `src/setup.ts` accepts any
+`*.vercel.app` origin by regex. A custom domain is **not** covered by that and
+must be listed here explicitly.
 
 ## File uploads are switched off
 
