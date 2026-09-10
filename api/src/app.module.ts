@@ -10,6 +10,7 @@ import { SeedModule } from './seed/seed.module';
 import { CatalogModule } from './catalog/catalog.module';
 import { OrdersModule } from './orders/orders.module';
 import { InstagramModule } from './instagram/instagram.module';
+import { InquiriesModule } from './inquiries/inquiries.module';
 import { HealthController } from './health.controller';
 
 @Module({
@@ -20,7 +21,13 @@ import { HealthController } from './health.controller';
       useFactory: (config: ConfigService) => ({
         uri: config.getOrThrow<string>('MONGODB_URI'),
         family: 4,
-        serverSelectionTimeoutMS: 20000,
+        // Serverless runs many short-lived containers at once, and an Atlas
+        // M0 caps total connections at 500 — a large pool per container
+        // exhausts that far sooner than the traffic warrants.
+        maxPoolSize: process.env.VERCEL ? 5 : 20,
+        // Must stay under the function's maxDuration so a cluster that is
+        // unreachable fails with a real error instead of a platform timeout.
+        serverSelectionTimeoutMS: process.env.VERCEL ? 10000 : 20000,
       }),
     }),
     UsersModule,
@@ -32,6 +39,7 @@ import { HealthController } from './health.controller';
     CatalogModule,
     OrdersModule,
     InstagramModule,
+    InquiriesModule,
   ],
   controllers: [HealthController],
 })

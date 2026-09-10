@@ -20,6 +20,16 @@ export class SeedService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
+    // On a long-running server this costs one bcrypt hash per restart. On
+    // serverless it would cost one per cold start, on the request that
+    // happens to pay for the container — so it is opt-out there, and the
+    // same work is done deliberately with `npm run reset:admin` /
+    // `npm run sync:collections` instead.
+    if ((this.config.get<string>('SEED_ON_BOOT') ?? 'true') !== 'true') {
+      this.logger.log('SEED_ON_BOOT is off — skipping boot seed');
+      return;
+    }
+
     const email = this.config.getOrThrow<string>('ADMIN_EMAIL').toLowerCase();
     const password = this.config.getOrThrow<string>('ADMIN_PASSWORD');
     const passwordHash = await bcrypt.hash(password, 10);
