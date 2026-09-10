@@ -6,22 +6,31 @@ import Link from "next/link";
 /**
  * Full-bleed campaign film.
  *
- * The file is ~7 MB, so it is never part of the initial page weight: nothing is
- * fetched until the band scrolls into view, and playback stops again once it
- * leaves. Muted + playsInline so mobile browsers will autoplay it at all, and a
- * visible pause control because it starts on its own (WCAG 2.2.2).
+ * Never part of the initial page weight: nothing is fetched until the band
+ * scrolls into view, and playback stops again once it leaves. Muted +
+ * playsInline so mobile browsers will autoplay it at all, and a visible pause
+ * control because it starts on its own (WCAG 2.2.2).
  *
- * The mp4 itself must stay faststart — moov atom ahead of mdat. Encoded the
- * other way round, Safari cannot begin until it has downloaded all 6.8 MB,
- * which on an iPhone reads as the film simply not loading. If this file is
- * ever re-exported, run it through `ffmpeg -i in.mp4 -c copy -movflags
- * +faststart out.mp4` before committing it.
+ * Two encodes, chosen by viewport. A phone was being sent the same 1920x1080
+ * master as a desktop — ten seconds at 5.7 Mbps, roughly eleven seconds of
+ * buffering on 4G before anything moved. The phone file is 720p and about a
+ * fifth of the weight; the band crops it hard anyway, and it sits under a
+ * scrim.
+ *
+ * Both are encoded without an audio track, since this never unmutes, and both
+ * must stay faststart — moov atom ahead of mdat, so a player can begin on the
+ * first few KB instead of hunting for the index at the end of the file. If
+ * either is ever re-exported:
+ *
+ *   ffmpeg -i in.mp4 -an -vf scale=1280:720 -c:v libx264 -preset slow \
+ *          -crf 28 -pix_fmt yuv420p -movflags +faststart out-mobile.mp4
  *
  * The poster is a real frame from the film, so the band shows the shot while
  * the video is still arriving rather than an empty panel.
  */
 export function CampaignVideo({
   src = "/media/hajar-campaign.mp4",
+  srcMobile = "/media/hajar-campaign-mobile.mp4",
   eyebrow = "The film",
   title = "Hajar by Nazish Ali",
   body = "Shot on a Lahore balcony — the couture line in movement, as it is meant to be seen.",
@@ -29,6 +38,7 @@ export function CampaignVideo({
   cta = "Shop the couture line",
 }: {
   src?: string;
+  srcMobile?: string;
   eyebrow?: string;
   title?: string;
   body?: string;
@@ -39,21 +49,31 @@ export function CampaignVideo({
   const sectionRef = useRef<HTMLElement>(null);
   const [playing, setPlaying] = useState(false);
   const [reduced, setReduced] = useState(false);
+  /**
+   * Resolved after mount, so it is never guessed during SSR. Null until then,
+   * which also keeps the observer below from assigning a src too early.
+   * Deliberately not reactive to resize: swapping the file mid-scroll would
+   * restart the loop and re-download it for no visible gain.
+   */
+  const [source, setSource] = useState<string | null>(null);
 
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }, []);
+    setSource(
+      window.matchMedia("(max-width: 768px)").matches ? srcMobile : src
+    );
+  }, [src, srcMobile]);
 
   // Only fetch and play while the band is actually on screen
   useEffect(() => {
     const section = sectionRef.current;
     const video = videoRef.current;
-    if (!section || !video || reduced) return;
+    if (!section || !video || reduced || !source) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (!video.src) video.src = src;
+          if (!video.src) video.src = source;
           void video.play().then(
             () => setPlaying(true),
             () => setPlaying(false)
@@ -68,12 +88,12 @@ export function CampaignVideo({
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [src, reduced]);
+  }, [source, reduced]);
 
   function toggle() {
     const video = videoRef.current;
-    if (!video) return;
-    if (!video.src) video.src = src;
+    if (!video || !source) return;
+    if (!video.src) video.src = source;
     if (video.paused) {
       void video.play().then(
         () => setPlaying(true),
