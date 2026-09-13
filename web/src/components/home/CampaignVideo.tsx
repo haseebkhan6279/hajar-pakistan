@@ -160,30 +160,21 @@ export function CampaignVideo({
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Scrim weighted to the left, where the type sits */}
-      <div className="absolute inset-0 bg-gradient-to-r from-hj-ink/65 via-hj-ink/25 to-transparent" />
+      <div className="absolute inset-0 bg-black/20" />
 
-      <div className="absolute inset-0 flex items-center">
-        <div className="mx-auto w-full max-w-[1500px] px-6 md:px-12">
-          <div className="max-w-lg text-center md:text-left">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-hj-gold-soft drop-shadow-[0_2px_10px_rgba(10,10,10,0.6)]">
-              {eyebrow}
-            </p>
-            <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] text-white drop-shadow-[0_2px_20px_rgba(10,10,10,0.45)]">
-              {title}
-            </h2>
-            <div className="rule-gold mx-auto mt-6 h-px w-20 md:mx-0" />
-            <p className="mt-6 text-[15px] leading-relaxed text-white/80 drop-shadow-[0_2px_12px_rgba(10,10,10,0.5)]">
-              {body}
-            </p>
-            <Link
-              href={href}
-              className="mt-9 inline-flex h-14 items-center border border-white bg-white px-9 text-xs uppercase tracking-[0.18em] text-hj-ink transition-colors duration-300 hover:border-hj-gold hover:bg-hj-gold hover:text-hj-ink"
-            >
-              {cta}
-            </Link>
-          </div>
-        </div>
+      <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+        <Link href={href} className="text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]">
+          <p className="text-[10px] uppercase tracking-[0.36em]">{eyebrow}</p>
+          <h2 className="mt-4 font-display text-[clamp(2.25rem,6vw,4.5rem)] font-light uppercase leading-none tracking-[0.22em]">
+            {title}
+          </h2>
+          <p className="mx-auto mt-5 max-w-[36ch] text-[13px] leading-relaxed text-white/80">
+            {body}
+          </p>
+          <span className="mt-7 inline-block text-[11px] uppercase tracking-[0.22em] underline underline-offset-8">
+            {cta}
+          </span>
+        </Link>
       </div>
 
       {/*

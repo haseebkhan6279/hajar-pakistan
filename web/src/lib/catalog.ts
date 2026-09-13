@@ -113,6 +113,8 @@ async function fetchJson<T>(
   try {
     const res = await fetch(`${API_URL}${path}`, {
       next: { revalidate: 30 },
+      // A hung API must not hang the page — give up and use the fallbacks
+      signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) return { ok: false };
     return { ok: true, data: (await res.json()) as T };

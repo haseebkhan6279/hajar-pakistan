@@ -18,7 +18,9 @@ export const SITE = {
   whatsappDisplay: "+92 328 8883222",
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hajarpakistan@gmail.com",
   instagramHandle: "@hajarbynazishali",
+  street: "26A J3, Johar Town",
   city: "Lahore",
+  region: "Punjab",
   country: "Pakistan",
   social: {
     instagram: "https://instagram.com/hajarbynazishali",
@@ -28,6 +30,15 @@ export const SITE = {
 
 export function absoluteUrl(path = "/") {
   return `${SITE.url}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+/** One-line atelier address for compact lockups. */
+export function atelierAddressLine() {
+  return `${SITE.street}, ${SITE.city}, ${SITE.region}`;
+}
+
+export function atelierMapsUrl() {
+  return `https://maps.google.com/?q=${encodeURIComponent(atelierAddressLine())}`;
 }
 
 export function rootMetadata(): Metadata {
@@ -137,7 +148,9 @@ export function organizationSchema() {
     description: SITE.description,
     address: {
       "@type": "PostalAddress",
+      streetAddress: SITE.street,
       addressLocality: SITE.city,
+      addressRegion: SITE.region,
       addressCountry: "PK",
     },
     contactPoint: {
@@ -148,6 +161,8 @@ export function organizationSchema() {
       areaServed: "PK",
       availableLanguage: ["en", "ur"],
     },
+    logo: absoluteUrl("/brand/hajar-logo.png"),
+    image: absoluteUrl("/brand/hajar-logo.png"),
     founder: { "@id": SITE.url + "/#designer" },
     sameAs: [SITE.social.instagram, SITE.social.facebook],
   };

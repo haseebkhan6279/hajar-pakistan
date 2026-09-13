@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { COLLECTIONS } from "@/lib/data";
+import { HOUSES } from "@/lib/data";
 
 const SORTS = [
   { value: "newest", label: "Newest" },
@@ -61,9 +61,9 @@ export function CatalogFilters({
           className={control}
         >
           <option value="">All collections</option>
-          {COLLECTIONS.map((c) => (
+          {HOUSES.map((c) => (
             <option key={c.slug} value={c.slug}>
-              {c.parentSlug ? `  ${c.name}` : c.name}
+              {c.name}
             </option>
           ))}
         </select>

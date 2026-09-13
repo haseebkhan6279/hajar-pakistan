@@ -17,7 +17,8 @@ the ink-and-gold pairing stays as the brand signature.
 | Ground | White `#FFFFFF` | Primary canvas |
 | Accent | Gold `#C8992F` | The single accent — never a second one |
 | Ink | `#0A0A0A` | Type, and the inverted panels lifted from the logo |
-| Asset | `web/public/brand/hajar-logo.jpg` | Square tile: mandala frame, gold roundel, wordmark |
+| Asset | `web/public/brand/hajar-logo.png` | Square tile: mandala frame, gold roundel, wordmark, byline |
+| Mark | `web/public/brand/hajar-mark.png` | Inner gold roundel — header, footer, favicon, admin |
 
 ## Colour tokens
 

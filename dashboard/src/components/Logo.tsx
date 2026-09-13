@@ -1,47 +1,21 @@
-/**
- * Brand lockup drawn in SVG so the admin never waits on an asset.
- * Swap in the supplied logo file later by replacing this component only.
- */
+const MARK_SRC = "/brand/hajar-mark.png";
+
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
+    <span
+      className="relative inline-block shrink-0 overflow-hidden rounded-full bg-hj-ink"
+      style={{ width: size, height: size }}
       role="img"
-      aria-label="HAJAR"
-      className="shrink-0"
+      aria-label="HAJAR by Nazish Ali"
     >
-      <circle cx="32" cy="32" r="31" fill="var(--hj-ink)" />
-      <circle
-        cx="32"
-        cy="32"
-        r="25"
-        fill="none"
-        stroke="var(--hj-gold)"
-        strokeWidth="1"
-        strokeDasharray="1.5 3"
-        opacity="0.75"
+      <img
+        src={MARK_SRC}
+        alt=""
+        width={size}
+        height={size}
+        className="h-full w-full object-cover"
       />
-      <circle
-        cx="32"
-        cy="32"
-        r="18"
-        fill="none"
-        stroke="var(--hj-gold)"
-        strokeWidth="1.2"
-      />
-      <text
-        x="32"
-        y="40"
-        textAnchor="middle"
-        fontFamily="'Amiri', 'Times New Roman', serif"
-        fontSize="21"
-        fill="var(--hj-gold-soft)"
-      >
-        هجر
-      </text>
-    </svg>
+    </span>
   );
 }
 
@@ -52,6 +26,9 @@ export function Wordmark({ subtitle }: { subtitle?: string }) {
       <div className="leading-none">
         <p className="font-display text-xl font-semibold tracking-brand text-hj-ink">
           HAJAR
+        </p>
+        <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-hj-gold-deep">
+          by Nazish Ali
         </p>
         {subtitle && (
           <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-hj-muted">

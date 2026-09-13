@@ -57,6 +57,9 @@ export function SignInPage() {
           <h1 className="mt-6 font-display text-3xl tracking-brand text-hj-ink lg:mt-0">
             HAJAR
           </h1>
+          <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-hj-gold-deep">
+            by Nazish Ali
+          </p>
           <p className="mt-2 text-[10px] uppercase tracking-[0.18em] text-hj-muted">
             Atelier admin sign in
           </p>

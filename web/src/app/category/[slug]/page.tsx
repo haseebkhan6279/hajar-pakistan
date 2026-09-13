@@ -1,8 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CatalogFilters } from "@/components/CatalogFilters";
 import { ProductGrid } from "@/components/ProductCard";
@@ -12,10 +10,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import {
   getCategories,
   getProductsByCategory,
-  PLACEHOLDER_IMAGE,
   sortProducts,
 } from "@/lib/catalog";
-import { childCollections, COLLECTIONS, collectionBySlug } from "@/lib/data";
+import { COLLECTIONS, HOUSES, collectionBySlug } from "@/lib/data";
 import { categoryPath } from "@/lib/paths";
 import {
   breadcrumbSchema,
@@ -82,7 +79,8 @@ export default async function CategoryPage({
   if (!local && !remote) notFound();
 
   const name = local?.name ?? remote!.name;
-  const blurb = local?.blurb ?? remote?.tagline ?? "";
+  const tagline = local?.tagline ?? remote?.tagline ?? "";
+  const blurb = local?.blurb ?? "";
 
   let products = await getProductsByCategory(slug);
   if (q) {
@@ -95,16 +93,11 @@ export default async function CategoryPage({
   }
   products = sortProducts(products, sort);
 
-  const cover = remote?.image || products[0]?.images[0] || PLACEHOLDER_IMAGE;
-
-  // A house shows its edits as filters; an edit links back up to its house
-  const children = childCollections(slug);
   const parent = local?.parentSlug
     ? collectionBySlug(local.parentSlug)
     : undefined;
-  const siblings = COLLECTIONS.filter(
-    (c) => c.slug !== slug && c.slug !== parent?.slug
-  );
+  const houseSlug = parent?.slug ?? slug;
+  const siblings = HOUSES.filter((h) => h.slug !== houseSlug);
 
   const trail = [
     { name: "Home", href: "/" },
@@ -121,52 +114,24 @@ export default async function CategoryPage({
         ]}
       />
 
-      {/* Collection hero — full bleed, type centred over the image */}
-      <section className="relative h-[52vh] min-h-[380px] bg-hj-sand">
-        <Image
-          src={cover}
-          alt={name}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-hj-ink/35" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-          <p className="text-[10px] uppercase tracking-[0.24em] text-hj-gold-soft">
-            Collection
-          </p>
-          <h1 className="mt-4 text-[clamp(2.25rem,6vw,4.25rem)] font-light uppercase leading-[0.98] tracking-[0.14em] text-white drop-shadow-[0_2px_18px_rgba(18,16,12,0.35)]">
+      <div className="mx-auto max-w-[1600px] px-4 py-10 md:px-8 md:py-16">
+        <Breadcrumbs trail={trail} />
+
+        <header className="mx-auto mt-10 max-w-3xl text-center">
+          <h1 className="font-display text-[clamp(1.75rem,4vw,2.75rem)] font-light uppercase tracking-[0.28em] text-hj-ink">
             {name}
           </h1>
+          {tagline && (
+            <p className="mt-3 font-display text-[clamp(1rem,1.6vw,1.25rem)] italic text-hj-gold-deep">
+              {tagline}
+            </p>
+          )}
           {blurb && (
-            <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/80">
+            <p className="mt-4 text-[14px] leading-relaxed text-hj-muted">
               {blurb}
             </p>
           )}
-        </div>
-      </section>
-
-      <div className="mx-auto max-w-[1400px] px-4 py-10 md:px-8 md:py-14">
-        <Breadcrumbs trail={trail} />
-
-        {/* A house offers its edits as a sub-nav */}
-        {children.length > 0 && (
-          <nav className="mt-8 flex flex-wrap gap-2">
-            <span className="inline-flex items-center border border-hj-ink bg-hj-ink px-5 py-2.5 text-[10px] uppercase tracking-[0.16em] text-hj-gold-soft">
-              All {name}
-            </span>
-            {children.map((child) => (
-              <Link
-                key={child.slug}
-                href={categoryPath(child.slug)}
-                className="inline-flex items-center border border-hj-border px-5 py-2.5 text-[10px] uppercase tracking-[0.16em] text-hj-ink-soft transition-colors hover:border-hj-gold hover:text-hj-gold-deep"
-              >
-                {child.name}
-              </Link>
-            ))}
-          </nav>
-        )}
+        </header>
 
         <div className="mt-8">
           <Suspense
@@ -202,9 +167,14 @@ export default async function CategoryPage({
                 href={categoryPath(c.slug)}
                 variant="ghost"
                 size="lg"
-                className="justify-between"
+                className="h-auto! justify-between py-4"
               >
-                <span>{c.name}</span>
+                <span className="text-left">
+                  <span className="block">{c.name}</span>
+                  <span className="mt-1 block font-display text-[14px] normal-case tracking-normal italic text-hj-gold-deep">
+                    {c.tagline}
+                  </span>
+                </span>
                 <span aria-hidden>→</span>
               </ButtonLink>
             ))}

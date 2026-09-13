@@ -368,6 +368,17 @@ export const HERO_SLIDES: HeroSlide[] = [
 ];
 
 /**
+ * The photo that fronts each house on the home page: a product and which of
+ * its images (0-based). Chosen by hand for a sharp, full-length portrait that
+ * does not repeat a hero shot. A slug missing from the catalogue falls back
+ * to the collection's own cover image.
+ */
+export const LOOKBOOK_COVERS: Record<string, { product: string; image: number }> = {
+  hajar: { product: "husn-e-mughal", image: 0 },
+  "hajar-by-nazish-ali": { product: "moonlight-pearl", image: 2 },
+};
+
+/**
  * The home-page edit — pieces promoted by hand, in order. This is a curated
  * row, not "newest": name the slugs you want to lead with. Anything missing
  * from the catalogue is skipped, and if none match the row falls back to the

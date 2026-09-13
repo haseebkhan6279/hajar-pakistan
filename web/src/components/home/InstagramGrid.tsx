@@ -154,20 +154,9 @@ export function InstagramGrid({ posts }: { posts: InstagramPost[] }) {
   return (
     <section className="border-t border-hj-border bg-white py-14 md:py-20">
       <header className="mx-auto max-w-2xl px-4 text-center">
-        <p className="eyebrow">Instagram</p>
-        {/* The handle is one unbreakable 17-character word, so the wide tracking
-            is what decides whether it fits. Below sm the clamp floor (1.75rem)
-            stops the type shrinking any further, so the tracking gives way
-            instead — at 0.16em this ran 362px wide inside a 328px column and
-            pushed the whole page sideways on a 360px phone. */}
-        <h2 className="mt-3 font-display text-[clamp(1.35rem,3.4vw,2.5rem)] uppercase tracking-[0.08em] text-hj-ink sm:tracking-[0.16em]">
+        <h2 className="font-display text-[clamp(1.25rem,3vw,2rem)] font-light uppercase tracking-[0.22em] text-hj-ink">
           {SITE.instagramHandle}
         </h2>
-        <div className="rule-gold mx-auto mt-4 h-px w-20" />
-        <p className="mt-4 text-[15px] text-hj-muted">
-          The work as it leaves the atelier — fittings, detail and finished
-          pieces.
-        </p>
       </header>
 
       <ul

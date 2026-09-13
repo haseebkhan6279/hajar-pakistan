@@ -15,9 +15,7 @@
   --hj-ink-soft: #38342c;
   --hj-muted: #7a7263;
 
-  /* Sampled from the gold calligraphy inside the logo roundel — the mark the
-     header and footer carry. The logo's gold is a gradient; this is its
-     mid-tone, the value the mark reads as. */
+  /* Sampled from the gold calligraphy in the logo roundel. */
   --hj-gold: #ddbd6c;
   --hj-gold-soft: #edd68f;
   --hj-gold-deep: #8b5e2b;

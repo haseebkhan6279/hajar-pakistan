@@ -143,10 +143,11 @@ Authenticated (Bearer JWT from `POST /api/auth/login`):
 - **Seeded imagery is hosted on Shopify's CDN**, carried over from the export.
   `cdn.shopify.com` is allow-listed in `next.config.ts`. New uploads through the
   dashboard go to Cloudinary; both hosts render side by side.
-- **The logo** lives at `web/public/brand/hajar-logo.jpg`. The header crops the
-  gold roundel out of the square tile (`LogoMark` in
-  [web/src/components/Brand.tsx](web/src/components/Brand.tsx)); the footer shows
-  the full tile. Swap the file to change both.
+- **The logo** lives at `web/public/brand/hajar-logo.png` (full tile) and
+  `web/public/brand/hajar-mark.png` (roundel). Header, footer and favicon use
+  the mark (`LogoMark` in
+  [web/src/components/Brand.tsx](web/src/components/Brand.tsx)); swap both
+  files to change the lockup everywhere.
 - **The campaign film** is `web/public/media/hajar-campaign.mp4` (1920×1080, 10s,
   ~7 MB), shown as a full-bleed band between the collections and the featured
   grid. It costs nothing on first load: the `src` is only attached once the band

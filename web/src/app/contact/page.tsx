@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ContactForm } from "@/app/contact/ContactForm";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbSchema, pageMetadata, SITE } from "@/lib/seo";
+import {
+  atelierMapsUrl,
+  breadcrumbSchema,
+  pageMetadata,
+  SITE,
+} from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact & appointments",
@@ -24,11 +29,12 @@ export default function ContactPage() {
 
       <div className="mt-10 grid gap-14 lg:grid-cols-2 lg:gap-24">
         <div>
-          <p className="eyebrow">Get in touch</p>
-          <h1 className="mt-3 font-display text-5xl leading-tight text-hj-ink md:text-6xl">
+          <p className="text-[11px] uppercase tracking-[0.28em] text-hj-muted">
+            Get in touch
+          </p>
+          <h1 className="mt-3 font-display text-5xl font-light uppercase tracking-[0.12em] leading-tight text-hj-ink md:text-6xl">
             Talk to the atelier
           </h1>
-          <div className="rule-gold mt-5 h-px w-24" />
           <p className="mt-7 max-w-md text-[15px] leading-relaxed text-hj-muted">
             Sizing questions, made-to-order enquiries, bridal appointments — the
             fastest answer is always WhatsApp, but the form works just as well.
@@ -62,7 +68,18 @@ export default function ContactPage() {
             <div>
               <dt className="eyebrow">Atelier</dt>
               <dd className="mt-2 text-sm leading-relaxed text-hj-ink-soft">
-                {SITE.city}, {SITE.country}
+                <a
+                  href={atelierMapsUrl()}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="transition-colors hover:text-hj-gold-deep"
+                >
+                  {SITE.street}
+                  <br />
+                  {SITE.city}, {SITE.region}
+                  <br />
+                  {SITE.country}
+                </a>
                 <br />
                 Monday to Saturday, by appointment
               </dd>

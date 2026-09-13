@@ -44,8 +44,8 @@ export default async function ProductsPage({
       <Breadcrumbs trail={trail} />
 
       <header className="mx-auto mt-10 max-w-2xl text-center">
-        <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] uppercase tracking-[0.16em] text-hj-ink">
-          Shop
+        <h1 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-light uppercase tracking-[0.28em] text-hj-ink">
+          All products
         </h1>
         <p className="mt-3 text-[15px] text-hj-muted">
           Discover our ready to wear and made-to-order lines.

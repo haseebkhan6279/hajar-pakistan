@@ -98,6 +98,11 @@ export default async function PolicyPage({ params }: { params: Params }) {
             <address className="mt-4 space-y-2 text-[15px] not-italic leading-relaxed text-hj-ink-soft">
               <p className="text-hj-ink">{SITE.legalName}</p>
               <p>
+                {SITE.street}
+                <br />
+                {SITE.city}, {SITE.region}, {SITE.country}
+              </p>
+              <p>
                 Email:{" "}
                 <a
                   href={`mailto:${SITE.email}`}

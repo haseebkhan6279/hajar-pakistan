@@ -2,16 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/clsx";
 
-export const LOGO_SRC = "/brand/hajar-logo.jpg";
+/** Full square tile: mandala frame, gold roundel, wordmark, designer byline. */
+export const LOGO_SRC = "/brand/hajar-logo.png";
+/** Inner monogram only — the gold roundel cropped for headers, favicons, lockups. */
+export const MARK_SRC = "/brand/hajar-mark.png";
 
-/**
- * The supplied logo is a square tile: an outer mandala frame, a gold roundel
- * carrying the هجر calligraphy, and the HAJAR wordmark beneath.
- *
- * For a small header mark we want the roundel alone, so the image is scaled up
- * inside a clipped circle and offset to centre on it. Measured off the asset:
- * the roundel spans roughly 33–67% horizontally and 29–62% vertically.
- */
 export function LogoMark({
   size = 44,
   className,
@@ -29,19 +24,12 @@ export function LogoMark({
       aria-hidden
     >
       <Image
-        src={LOGO_SRC}
+        src={MARK_SRC}
         alt=""
-        width={size * 3}
-        height={size * 3}
+        width={size}
+        height={size}
         priority
-        className="max-w-none"
-        style={{
-          position: "absolute",
-          width: size * 2.9,
-          height: size * 2.9,
-          left: -size * 0.95,
-          top: -size * 0.82,
-        }}
+        className="h-full w-full object-cover"
       />
     </span>
   );
@@ -58,7 +46,7 @@ export function LogoTile({
   return (
     <Image
       src={LOGO_SRC}
-      alt="HAJAR"
+      alt="HAJAR by Nazish Ali"
       width={size}
       height={size}
       className={cn("h-auto", className)}
@@ -79,12 +67,17 @@ export function Wordmark({
   return (
     <Link
       href={href}
-      aria-label="HAJAR — home"
+      aria-label="HAJAR by Nazish Ali — home"
       className={cn("flex items-center gap-3", className)}
     >
       {showMark && <LogoMark size={38} />}
-      <span className="font-display text-2xl font-semibold tracking-brand text-hj-ink">
-        HAJAR
+      <span className="leading-none">
+        <span className="block font-display text-2xl font-semibold tracking-brand text-hj-ink">
+          HAJAR
+        </span>
+        <span className="mt-1 block text-[9px] uppercase tracking-[0.22em] text-hj-gold-deep">
+          by Nazish Ali
+        </span>
       </span>
     </Link>
   );
