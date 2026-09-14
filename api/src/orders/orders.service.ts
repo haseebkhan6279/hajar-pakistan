@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Order, OrderDocument, toAdminOrder } from './order.schema';
 import { CreateOrderDto, UpdateOrderStatusDto } from './dto/order.dto';
-import { ORDER_PREFIX } from '../common/brand';
+import { ADDONS, ORDER_PREFIX } from '../common/brand';
 
 /**
  * Shipping is not quoted at checkout. Per the published shipping policy,
@@ -25,8 +25,27 @@ export class OrdersService {
   }
 
   async create(dto: CreateOrderDto) {
-    const subtotal = dto.items.reduce(
-      (sum, item) => sum + item.price * item.qty,
+    const items = dto.items.map((item) => {
+      const addons = [...new Set(item.addons ?? [])].map((id) => ({
+        id,
+        ...ADDONS[id],
+      }));
+      const unitPrice =
+        item.price + addons.reduce((sum, a) => sum + a.price, 0);
+      return {
+        productId: item.productId,
+        name: item.name,
+        slug: item.slug,
+        price: item.price,
+        qty: item.qty,
+        addons,
+        unitPrice,
+        color: item.color ?? '',
+        image: item.image ?? '',
+      };
+    });
+    const subtotal = items.reduce(
+      (sum, item) => sum + item.unitPrice * item.qty,
       0,
     );
     const shipping = SHIPPING_TO_BE_CONFIRMED;
@@ -46,16 +65,7 @@ export class OrdersService {
         country: dto.customer.country?.trim() || 'Pakistan',
         notes: (dto.customer.notes ?? '').trim(),
       },
-      items: dto.items.map((item) => ({
-        productId: item.productId,
-        name: item.name,
-        slug: item.slug,
-        price: item.price,
-        qty: item.qty,
-        size: item.size ?? '',
-        color: item.color ?? '',
-        image: item.image ?? '',
-      })),
+      items,
       paymentMethod: 'pending',
       status: 'pending',
       subtotal,

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect } from "react";
-import { useCart } from "@/components/cart/CartProvider";
+import { lineOptions, unitPrice, useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/currency/Price";
 import { productPath } from "@/lib/paths";
 
@@ -119,7 +119,7 @@ export function CartDrawer() {
                         {line.product.name}
                       </Link>
                       <p className="mt-0.5 text-[11px] text-hj-muted">
-                        {[line.size, line.color].filter(Boolean).join(" · ")}
+                        {lineOptions(line)}
                       </p>
 
                       <div className="mt-auto flex items-center justify-between pt-3">
@@ -145,7 +145,7 @@ export function CartDrawer() {
                           </button>
                         </div>
                         <span className="text-sm text-hj-ink">
-                          <Price amount={line.product.price * line.qty} />
+                          <Price amount={unitPrice(line) * line.qty} />
                         </span>
                       </div>
 

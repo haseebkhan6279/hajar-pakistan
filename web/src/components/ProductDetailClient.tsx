@@ -5,18 +5,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/currency/Price";
-import { savePercent, SIZE_GUIDE, type Product } from "@/lib/data";
+import { addonsFor, savePercent, type Product } from "@/lib/data";
 import { cn } from "@/lib/clsx";
 
 export function ProductDetailClient({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [active, setActive] = useState(0);
-  const [size, setSize] = useState(
-    product.sizes[0] ?? (product.madeToMeasure ? "Made to measure" : "One size")
-  );
   const [color, setColor] = useState(product.colors[0]?.name ?? "");
   const [qty, setQty] = useState(1);
   const [openPanel, setOpenPanel] = useState<string | null>("details");
+
+  const addons = addonsFor(product.categorySlug);
+  const [picked, setPicked] = useState<string[]>(
+    addons.filter((a) => a.defaultOn).map((a) => a.id)
+  );
+  const chosen = addons.filter((a) => picked.includes(a.id));
+  const unit = product.price + chosen.reduce((sum, a) => sum + a.price, 0);
+
+  function toggleAddon(id: string) {
+    setPicked((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
 
   const save = savePercent(product.price, product.compareAtPrice);
   const soldOut = product.stock === 0;
@@ -57,40 +67,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
         </div>
       ),
     },
-    // A made-to-measure piece has no standard sizes, so the chart is noise
-    ...(product.madeToMeasure ? [] : [{
-      id: "size",
-      title: "Size guide",
-      content: (
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-hj-border text-[10px] uppercase tracking-[0.14em] text-hj-muted">
-                <th className="py-2.5 font-medium">Size</th>
-                <th className="py-2.5 font-medium">Bust</th>
-                <th className="py-2.5 font-medium">Waist</th>
-                <th className="py-2.5 font-medium">Hip</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-hj-border text-hj-ink-soft">
-              {SIZE_GUIDE.map((r) => (
-                <tr key={r.size}>
-                  <td className="py-2.5">{r.size}</td>
-                  <td className="py-2.5">{r.bust}</td>
-                  <td className="py-2.5">{r.waist}</td>
-                  <td className="py-2.5">{r.hip}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="mt-4 text-xs leading-relaxed text-hj-muted">
-            Measurements are body measurements, not garment measurements. For
-            made-to-order pieces we fit to your own measurements — get in touch
-            on WhatsApp.
-          </p>
-        </div>
-      ),
-    }]),
     {
       id: "delivery",
       title: "Delivery & returns",
@@ -104,10 +80,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
             <li>
               Ready-to-wear pieces may be dispatched sooner; we confirm the
               timeframe when you order.
-            </li>
-            <li>
-              Ready-to-wear size exchanges: contact us within 48 hours of
-              delivery, unworn and with tags intact.
             </li>
             <li>
               Made-to-order and customized pieces cannot be returned, exchanged
@@ -277,57 +249,53 @@ export function ProductDetailClient({ product }: { product: Product }) {
           </div>
         )}
 
-        {/* Size — or a made-to-measure note where there is no size list */}
-        {product.madeToMeasure ? (
-          <div className="mt-7 border border-hj-gold bg-hj-gold-wash p-5">
-            <p className="text-[10px] uppercase tracking-[0.16em] text-hj-gold-deep">
-              Made to measure
-            </p>
-            <p className="mt-2.5 text-sm leading-relaxed text-hj-ink-soft">
-              This piece is cut to your own measurements — there are no standard
-              sizes. Our team will take you through measurements after your
-              order is confirmed, or you can book a fitting at the atelier.
-            </p>
-            <Link
-              href="/contact"
-              className="mt-3 inline-block text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
-            >
-              Book a fitting →
-            </Link>
-          </div>
-        ) : (
-          <div className="mt-7">
-            <div className="flex items-baseline justify-between">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-hj-muted">
-                Size
+        {/* Add-ons — extras that change the price */}
+        {addons.length > 0 && (
+          <fieldset className="mt-7">
+            <legend className="text-[10px] uppercase tracking-[0.16em] text-hj-muted">
+              Options
+            </legend>
+            <div className="mt-3 divide-y divide-hj-border border-y border-hj-border">
+              {addons.map((a) => {
+                const on = picked.includes(a.id);
+                return (
+                  <label
+                    key={a.id}
+                    className="flex min-h-12 cursor-pointer items-center gap-3 py-2.5"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={on}
+                      onChange={() => toggleAddon(a.id)}
+                      className="h-4 w-4 shrink-0 accent-hj-gold-deep"
+                    />
+                    <span className="flex-1 text-sm text-hj-ink-soft">
+                      {a.label}
+                    </span>
+                    <span className="text-[13px] text-hj-muted">
+                      {a.price > 0 ? (
+                        <>
+                          + <Price amount={a.price} />
+                        </>
+                      ) : (
+                        "Included in price"
+                      )}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+            {unit !== product.price && (
+              <p className="mt-3 flex items-baseline justify-between text-sm">
+                <span className="text-[10px] uppercase tracking-[0.16em] text-hj-muted">
+                  Total
+                </span>
+                <span className="text-lg text-hj-ink">
+                  <Price amount={unit * qty} />
+                </span>
               </p>
-              <button
-                type="button"
-                onClick={() => setOpenPanel("size")}
-                className="tap-target text-[10px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
-              >
-                Size guide
-              </button>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {product.sizes.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  aria-pressed={size === s}
-                  onClick={() => setSize(s)}
-                  className={cn(
-                    "h-11 min-w-[56px] border px-4 text-xs uppercase tracking-[0.12em] transition-colors",
-                    size === s
-                      ? "border-hj-ink bg-hj-ink text-hj-gold-soft"
-                      : "border-hj-border text-hj-ink-soft hover:border-hj-ink"
-                  )}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
+            )}
+          </fieldset>
         )}
 
         {/* Quantity + add */}
@@ -355,7 +323,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
           <button
             type="button"
             disabled={soldOut}
-            onClick={() => addItem(product, size, color, qty)}
+            onClick={() => addItem(product, color, chosen, qty)}
             className="h-14 flex-1 bg-hj-ink px-8 text-xs uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink disabled:cursor-not-allowed disabled:bg-hj-sand-2 disabled:text-hj-muted"
           >
             {soldOut ? "Sold out" : "Add to bag"}

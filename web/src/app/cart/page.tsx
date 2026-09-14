@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useCart } from "@/components/cart/CartProvider";
+import { lineOptions, unitPrice, useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/currency/Price";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -77,7 +77,7 @@ export default function CartPage() {
                       {line.product.name}
                     </Link>
                     <p className="mt-1.5 text-[11px] uppercase tracking-[0.12em] text-hj-muted">
-                      {[line.size, line.color].filter(Boolean).join(" · ")}
+                      {lineOptions(line)}
                     </p>
 
                     <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-5">
@@ -105,7 +105,7 @@ export default function CartPage() {
 
                       <div className="text-right">
                         <p className="text-base text-hj-ink">
-                          <Price amount={line.product.price * line.qty} />
+                          <Price amount={unitPrice(line) * line.qty} />
                         </p>
                         <button
                           type="button"

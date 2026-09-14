@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../lib/api";
 import {
   PIECE_PRESET,
-  SIZE_PRESET,
   formatPrice,
   slugify,
   type AdminCategory,
@@ -34,7 +33,6 @@ type FormState = {
   description: string;
   tags: string[];
   highlights: string[];
-  sizes: string[];
   colors: ProductColor[];
   specifications: { key: string; value: string }[];
   images: string[];
@@ -55,7 +53,6 @@ const EMPTY: FormState = {
   description: "",
   tags: [],
   highlights: [],
-  sizes: [],
   colors: [],
   specifications: [],
   images: [],
@@ -110,7 +107,6 @@ export function ProductFormPage() {
           description: data.description ?? "",
           tags: data.tags ?? [],
           highlights: data.highlights ?? [],
-          sizes: data.sizes ?? [],
           colors: data.colors ?? [],
           specifications: data.specifications ?? [],
           images: data.images ?? [],
@@ -142,7 +138,6 @@ export function ProductFormPage() {
       description: form.description.trim(),
       tags: form.tags,
       highlights: form.highlights,
-      sizes: form.sizes,
       colors: form.colors.filter((c) => c.name.trim()),
       specifications: form.specifications.filter((s) => s.key.trim()),
       images: form.images,
@@ -307,54 +302,9 @@ export function ProductFormPage() {
           </SectionCard>
 
           <SectionCard
-            title="Sizing & colourways"
-            description="Sizes appear as selectable chips on the product page; colours render as swatches."
+            title="Colourways"
+            description="Colours render as swatches on the product page."
           >
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.16em] text-hj-muted">
-                Sizes
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {SIZE_PRESET.map((s) => {
-                  const on = form.sizes.includes(s);
-                  return (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() =>
-                        set(
-                          "sizes",
-                          on
-                            ? form.sizes.filter((x) => x !== s)
-                            : [...form.sizes, s]
-                        )
-                      }
-                      className={`h-10 min-w-[52px] rounded-sm border px-3 text-sm transition-colors ${
-                        on
-                          ? "border-hj-gold bg-hj-gold-wash text-hj-ink"
-                          : "border-hj-border text-hj-muted hover:border-hj-border-strong"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  );
-                })}
-              </div>
-              <ListField
-                className="mt-4"
-                label="Custom sizes"
-                hint="adds to the list above"
-                value={form.sizes.filter((s) => !SIZE_PRESET.includes(s))}
-                onChange={(custom) =>
-                  set("sizes", [
-                    ...form.sizes.filter((s) => SIZE_PRESET.includes(s)),
-                    ...custom,
-                  ])
-                }
-                placeholder="Unstitched, Made to measure"
-              />
-            </div>
-
             <div>
               <div className="flex items-center justify-between">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-hj-muted">

@@ -56,7 +56,6 @@ const PRODUCTS = [
       "Hand-set pearls",
       "Crystal accents"
     ],
-    "sizes": [],
     "colors": [
       {
         "name": "Blush",
@@ -98,7 +97,6 @@ const PRODUCTS = [
       "Hand-set pearls",
       "Crystal accents"
     ],
-    "sizes": [],
     "colors": [
       {
         "name": "Ivory",
@@ -140,12 +138,6 @@ const PRODUCTS = [
       "Dabka and kora hand work",
       "Hand-set pearls",
       "Sequin detailing"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -195,12 +187,6 @@ const PRODUCTS = [
       "Sequin detailing",
       "Tassel finish"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Teal",
@@ -243,12 +229,6 @@ const PRODUCTS = [
       "Resham thread embroidery",
       "Raw silk"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Black",
@@ -290,12 +270,6 @@ const PRODUCTS = [
       "Cutdana detailing",
       "Luxe velvet"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Plum",
@@ -336,12 +310,6 @@ const PRODUCTS = [
       "Resham thread embroidery",
       "Pure Irani silk"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Blush",
@@ -380,12 +348,6 @@ const PRODUCTS = [
     "highlights": [
       "Pure organza",
       "Hand embroidery throughout"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -427,12 +389,6 @@ const PRODUCTS = [
       "Sequin detailing",
       "Pure organza"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Silver",
@@ -471,12 +427,6 @@ const PRODUCTS = [
     "highlights": [
       "Dabka and kora hand work",
       "Pure Irani silk"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -518,12 +468,6 @@ const PRODUCTS = [
       "Hand-worked zardozi",
       "Hand-set pearls",
       "Sequin detailing"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -567,12 +511,6 @@ const PRODUCTS = [
       "Dabka and kora hand work",
       "Resham thread embroidery",
       "Raw silk"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -618,12 +556,6 @@ const PRODUCTS = [
       "Gold beadwork",
       "Pure silk"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Champagne Gold",
@@ -664,12 +596,6 @@ const PRODUCTS = [
       "Tassel finish",
       "Pure silk"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Pistachio",
@@ -708,12 +634,6 @@ const PRODUCTS = [
     "description": "Because true beauty is always in the finer touches!\n\nModern tailoring meets regal artistry in Peacock Royale. This blush-pink two-piece suit features a sharp blazer-style top and straight pants, crowned with hand-embroidered peacock motifs at the hem. A bold statement of poise and power.",
     "highlights": [
       "Hand embroidery throughout"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -755,12 +675,6 @@ const PRODUCTS = [
       "Cutdana detailing",
       "Crystal accents"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Blush",
@@ -801,12 +715,6 @@ const PRODUCTS = [
       "Raw silk",
       "Hand embroidery throughout"
     ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
-    ],
     "colors": [
       {
         "name": "Ivory",
@@ -846,12 +754,6 @@ const PRODUCTS = [
     "highlights": [
       "Raw silk",
       "Hand embroidery throughout"
-    ],
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L"
     ],
     "colors": [
       {
@@ -923,6 +825,8 @@ async function main() {
       { slug: p.slug },
       {
         $set: { ...p, brand: 'HAJAR', updatedAt: new Date() },
+        // Pieces are no longer sold in sizes; clear any left by earlier runs
+        $unset: { sizes: '' },
         $setOnInsert: { createdAt: new Date() },
       },
       { upsert: true },

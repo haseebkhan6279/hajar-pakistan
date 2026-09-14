@@ -1,6 +1,7 @@
 import {
   ArrayMinSize,
   IsArray,
+  IsIn,
   IsNumber,
   IsOptional,
   IsString,
@@ -8,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ADDONS } from '../../common/brand';
 
 class CustomerDto {
   @IsString()
@@ -60,9 +62,11 @@ class OrderItemDto {
   @Min(1)
   qty: number;
 
+  /** Ids from ADDONS in common/brand.ts */
   @IsOptional()
-  @IsString()
-  size?: string;
+  @IsArray()
+  @IsIn(Object.keys(ADDONS), { each: true })
+  addons?: string[];
 
   @IsOptional()
   @IsString()

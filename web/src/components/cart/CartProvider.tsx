@@ -9,14 +9,30 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Product } from "@/lib/data";
+import type { Product, ProductAddon } from "@/lib/data";
 
 export type CartLine = {
   product: Product;
-  size: string;
   color: string;
+  /** Extras ticked on the product page, e.g. sleeves */
+  addons: ProductAddon[];
   qty: number;
 };
+
+/** Price of one piece with its extras. */
+export function unitPrice(line: CartLine) {
+  return (
+    line.product.price +
+    (line.addons ?? []).reduce((sum, a) => sum + a.price, 0)
+  );
+}
+
+/** "Colour · Add Sleeves" — the line's choices, for the bag and checkout. */
+export function lineOptions(line: CartLine) {
+  return [line.color, ...(line.addons ?? []).map((a) => a.label)]
+    .filter(Boolean)
+    .join(" · ");
+}
 
 /**
  * Shipping is not quoted on the site. Per the published shipping policy,
@@ -34,7 +50,12 @@ type CartContextValue = {
   hydrated: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addItem: (product: Product, size: string, color: string, qty?: number) => void;
+  addItem: (
+    product: Product,
+    color: string,
+    addons?: ProductAddon[],
+    qty?: number
+  ) => void;
   updateQty: (key: string, qty: number) => void;
   removeItem: (key: string) => void;
   clearCart: () => void;
@@ -43,9 +64,15 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function keyOf(productId: string, size: string, color: string) {
-  return `${productId}::${size}::${color}`;
+function keyOf(productId: string, color: string, addons: ProductAddon[] = []) {
+  const extras = addons
+    .map((a) => a.id)
+    .sort()
+    .join("+");
+  return `${productId}::${color}::${extras}`;
 }
+
+const lineKeyOf = (l: CartLine) => keyOf(l.product.id, l.color, l.addons);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
@@ -56,7 +83,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setLines(JSON.parse(raw) as CartLine[]);
+      if (raw) {
+        // Bags saved before add-ons existed carry a size and no addons
+        const saved = JSON.parse(raw) as CartLine[];
+        setLines(
+          saved.map((l) => ({
+            product: l.product,
+            color: l.color ?? "",
+            addons: l.addons ?? [],
+            qty: l.qty,
+          }))
+        );
+      }
     } catch {
       // corrupted or unavailable storage — start empty
     }
@@ -72,26 +110,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [lines, hydrated]);
 
-  const lineKey = useCallback(
-    (line: CartLine) => keyOf(line.product.id, line.size, line.color),
-    []
-  );
+  const lineKey = useCallback(lineKeyOf, []);
 
   const addItem = useCallback(
-    (product: Product, size: string, color: string, qty = 1) => {
+    (product: Product, color: string, addons: ProductAddon[] = [], qty = 1) => {
       setLines((prev) => {
-        const k = keyOf(product.id, size, color);
-        const existing = prev.find(
-          (l) => keyOf(l.product.id, l.size, l.color) === k
-        );
+        const k = keyOf(product.id, color, addons);
+        const existing = prev.find((l) => lineKeyOf(l) === k);
         if (existing) {
           return prev.map((l) =>
-            keyOf(l.product.id, l.size, l.color) === k
-              ? { ...l, qty: l.qty + qty }
-              : l
+            lineKeyOf(l) === k ? { ...l, qty: l.qty + qty } : l
           );
         }
-        return [...prev, { product, size, color, qty }];
+        return [...prev, { product, color, addons, qty }];
       });
       setIsOpen(true);
     },
@@ -101,24 +132,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const updateQty = useCallback((key: string, qty: number) => {
     setLines((prev) =>
       prev
-        .map((l) =>
-          keyOf(l.product.id, l.size, l.color) === key ? { ...l, qty } : l
-        )
+        .map((l) => (lineKeyOf(l) === key ? { ...l, qty } : l))
         .filter((l) => l.qty > 0)
     );
   }, []);
 
   const removeItem = useCallback((key: string) => {
-    setLines((prev) =>
-      prev.filter((l) => keyOf(l.product.id, l.size, l.color) !== key)
-    );
+    setLines((prev) => prev.filter((l) => lineKeyOf(l) !== key));
   }, []);
 
   const clearCart = useCallback(() => setLines([]), []);
 
   const value = useMemo<CartContextValue>(() => {
     const count = lines.reduce((n, l) => n + l.qty, 0);
-    const subtotal = lines.reduce((n, l) => n + l.product.price * l.qty, 0);
+    const subtotal = lines.reduce((n, l) => n + unitPrice(l) * l.qty, 0);
     return {
       lines,
       count,

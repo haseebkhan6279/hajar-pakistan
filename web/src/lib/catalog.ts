@@ -1,5 +1,9 @@
 import type { Category, Product, ProductColor } from "./data";
-import { collectionFamily, FALLBACK_PRODUCTS } from "./data";
+import {
+  collectionBySlug,
+  collectionFamily,
+  FALLBACK_PRODUCTS,
+} from "./data";
 import { slugifyPath } from "./paths";
 
 /** Shape returned by the Nest catalog endpoints. */
@@ -16,7 +20,6 @@ export type CatalogProduct = {
   tags: string[];
   description: string;
   highlights: string[];
-  sizes: string[];
   colors: ProductColor[];
   fabric: string;
   pieces: string;
@@ -76,14 +79,17 @@ export function mapCatalogProduct(p: CatalogProduct): Product {
         : [PLACEHOLDER_IMAGE];
 
   const slug = slugifyPath(p.slug || p.name);
+  const categorySlug = slugifyPath(p.category);
 
   return {
     id: p.id,
     slug,
     name: p.name,
     brand: p.brand || "HAJAR",
-    category: p.category,
-    categorySlug: slugifyPath(p.category),
+    // Show the storefront's name for the collection ("ZOUQ Volume 1"); the
+    // slug still comes from the name the product is filed under
+    category: collectionBySlug(categorySlug)?.name ?? p.category,
+    categorySlug,
     price: p.price,
     compareAtPrice: p.compareAtPrice,
     stock: p.stock,
@@ -92,9 +98,6 @@ export function mapCatalogProduct(p: CatalogProduct): Product {
       p.colors?.length > 0
         ? p.colors
         : [{ name: "As pictured", hex: "#EFE7D8" }],
-    // No size list means the piece is cut to the customer's measurements
-    sizes: p.sizes ?? [],
-    madeToMeasure: !(p.sizes?.length > 0),
     images,
     description: p.description || "",
     highlights: p.highlights ?? [],

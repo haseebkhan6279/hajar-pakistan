@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCart } from "@/components/cart/CartProvider";
+import { lineOptions, unitPrice, useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/currency/Price";
 import { useCurrency } from "@/components/currency/CurrencyProvider";
 import { formatPrice } from "@/lib/data";
@@ -87,7 +87,7 @@ export default function CheckoutPage() {
         slug: l.product.slug,
         price: l.product.price,
         qty: l.qty,
-        size: l.size,
+        addons: l.addons.map((a) => a.id),
         color: l.color,
         image: l.product.images[0] ?? "",
       })),
@@ -306,11 +306,11 @@ export default function CheckoutPage() {
                     {l.product.name}
                   </p>
                   <p className="mt-0.5 text-[11px] text-hj-muted">
-                    {[l.size, l.color].filter(Boolean).join(" · ")} · ×{l.qty}
+                    {[lineOptions(l), `×${l.qty}`].filter(Boolean).join(" · ")}
                   </p>
                 </div>
                 <span className="shrink-0 text-sm text-hj-ink">
-                  <Price amount={l.product.price * l.qty} />
+                  <Price amount={unitPrice(l) * l.qty} />
                 </span>
               </li>
             ))}

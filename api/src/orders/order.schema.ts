@@ -33,6 +33,8 @@ export class OrderCustomer {
   notes: string;
 }
 
+export type OrderAddon = { id: string; label: string; price: number };
+
 @Schema({ _id: false })
 export class OrderItem {
   @Prop({ required: true })
@@ -50,8 +52,20 @@ export class OrderItem {
   @Prop({ required: true })
   qty: number;
 
-  @Prop({ default: '' })
-  size: string;
+  /** Extras chosen with the piece; their prices are included in unitPrice */
+  @Prop({
+    type: [{ id: String, label: String, price: Number, _id: false }],
+    default: [],
+  })
+  addons: OrderAddon[];
+
+  /** price plus the add-ons, per piece */
+  @Prop()
+  unitPrice: number;
+
+  /** Only on orders placed before sizes were dropped */
+  @Prop()
+  size?: string;
 
   @Prop({ default: '' })
   color: string;

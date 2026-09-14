@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CatalogFilters } from "@/components/CatalogFilters";
@@ -10,9 +12,15 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import {
   getCategories,
   getProductsByCategory,
+  PLACEHOLDER_IMAGE,
   sortProducts,
 } from "@/lib/catalog";
-import { COLLECTIONS, HOUSES, collectionBySlug } from "@/lib/data";
+import {
+  COLLECTIONS,
+  HOUSES,
+  childCollections,
+  collectionBySlug,
+} from "@/lib/data";
 import { categoryPath } from "@/lib/paths";
 import {
   breadcrumbSchema,
@@ -82,7 +90,23 @@ export default async function CategoryPage({
   const tagline = local?.tagline ?? remote?.tagline ?? "";
   const blurb = local?.blurb ?? "";
 
-  let products = await getProductsByCategory(slug);
+  /*
+    A house with sub-collections (HAJAR → ZOUQ Volume 1 and 2) opens on a
+    choice of volume rather than every piece at once; the pieces live one
+    level down, on each volume's own page.
+  */
+  const volumes = childCollections(slug);
+  const allProducts = await getProductsByCategory(slug);
+  const volumeCards = volumes.map((v) => {
+    const pieces = allProducts.filter((p) => p.categorySlug === v.slug);
+    const cover =
+      categories.find((c) => c.slug === v.slug)?.image ||
+      pieces[0]?.images[0] ||
+      PLACEHOLDER_IMAGE;
+    return { ...v, cover, count: pieces.length };
+  });
+
+  let products = allProducts;
   if (q) {
     const needle = q.toLowerCase();
     products = products.filter(
@@ -133,6 +157,41 @@ export default async function CategoryPage({
           )}
         </header>
 
+        {volumeCards.length > 0 ? (
+          <ul className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-2 md:gap-8">
+            {volumeCards.map((v) => (
+              <li key={v.slug}>
+                <Link href={categoryPath(v.slug)} className="group block">
+                  <div className="relative aspect-[3/4] overflow-hidden bg-hj-sand">
+                    <Image
+                      src={v.cover}
+                      alt={v.name}
+                      fill
+                      priority
+                      sizes="(max-width: 640px) 100vw, 480px"
+                      className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-hj-ink/75 to-transparent px-5 pb-6 pt-20 text-center text-white">
+                      <h2 className="font-display text-[clamp(1.35rem,3vw,1.9rem)] font-light uppercase tracking-[0.22em]">
+                        {v.name}
+                      </h2>
+                      <p className="mt-2 font-display text-[15px] italic text-hj-gold-soft">
+                        {v.tagline}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-4 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.18em] text-hj-ink transition-colors group-hover:text-hj-gold-deep">
+                    {v.count > 0
+                      ? `View ${v.count} ${v.count === 1 ? "piece" : "pieces"}`
+                      : "View collection"}
+                    <span aria-hidden>→</span>
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+        <>
         <div className="mt-8">
           <Suspense
             fallback={<div className="h-[76px] border-y border-hj-border" />}
@@ -156,6 +215,8 @@ export default async function CategoryPage({
             />
           )}
         </div>
+        </>
+        )}
 
         {/* Sister collections */}
         <nav className="mt-24 border-t border-hj-border pt-10">

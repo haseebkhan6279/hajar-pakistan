@@ -14,9 +14,6 @@ export type Product = {
   stock: number;
   badge?: "New" | "Limited" | "Bridal";
   colors: ProductColor[];
-  /** Empty when the piece is cut to the customer's own measurements */
-  sizes: string[];
-  madeToMeasure: boolean;
   images: string[];
   description: string;
   highlights: string[];
@@ -48,6 +45,33 @@ export type JournalPost = {
   category: string;
 };
 
+/** An optional extra a customer can tick on the product page. */
+export type ProductAddon = {
+  id: string;
+  label: string;
+  /** Added to the unit price when ticked. 0 means it is already in the price. */
+  price: number;
+  /** Ticked when the page opens */
+  defaultOn?: boolean;
+};
+
+/**
+ * Extras offered per collection. The dupatta is part of the base price, so it
+ * is shown ticked at no charge; sleeves add to the total. Prices are in PKR and
+ * must match ADDONS in api/src/common/brand.ts, which the order total is
+ * worked out from.
+ */
+export const COLLECTION_ADDONS: Record<string, ProductAddon[]> = {
+  "hajar-by-nazish-ali": [
+    { id: "dupatta", label: "Add Dupatta", price: 0, defaultOn: true },
+    { id: "sleeves", label: "Add Sleeves", price: 10000 },
+  ],
+};
+
+export function addonsFor(categorySlug: string): ProductAddon[] {
+  return COLLECTION_ADDONS[categorySlug] ?? [];
+}
+
 export type Collection = {
   name: string;
   slug: string;
@@ -72,7 +96,7 @@ export const COLLECTIONS: Collection[] = [
     parentSlug: "",
   },
   {
-    name: "ZOUQ 1",
+    name: "ZOUQ Volume 1",
     slug: "zouq-1",
     tagline: "The founding edit.",
     blurb:
@@ -80,7 +104,7 @@ export const COLLECTIONS: Collection[] = [
     parentSlug: "hajar",
   },
   {
-    name: "ZOUQ 2",
+    name: "ZOUQ Volume 2",
     slug: "zouq-2",
     tagline: "The second edit.",
     blurb:
@@ -253,15 +277,6 @@ export const DESIGNER = {
     houses: "HAJAR | HAJAR BY NAZISH ALI",
   },
 };
-
-export const SIZE_GUIDE = [
-  { size: "XS", bust: "32\"", waist: "26\"", hip: "35\"" },
-  { size: "S", bust: "34\"", waist: "28\"", hip: "37\"" },
-  { size: "M", bust: "36\"", waist: "30\"", hip: "39\"" },
-  { size: "L", bust: "38\"", waist: "32\"", hip: "41\"" },
-  { size: "XL", bust: "40\"", waist: "34\"", hip: "43\"" },
-  { size: "XXL", bust: "42\"", waist: "36\"", hip: "45\"" },
-];
 
 export const JOURNAL: JournalPost[] = [
   {

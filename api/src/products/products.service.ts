@@ -84,7 +84,6 @@ export class ProductsService {
       status: dto.status ?? 'draft',
       tags: dto.tags ?? [],
       highlights: dto.highlights ?? [],
-      sizes: dto.sizes ?? [],
       colors: sanitizeColors(dto.colors),
       fabric: dto.fabric ?? '',
       pieces: dto.pieces ?? '',

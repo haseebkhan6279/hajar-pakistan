@@ -61,6 +61,8 @@ const nextConfig: NextConfig = {
         destination: "/policies/shipping-delivery",
         permanent: true,
       },
+      // Pieces are no longer sold in sizes
+      { source: "/size-guide", destination: "/products", permanent: false },
       {
         source: "/cookies",
         destination: "/privacy",

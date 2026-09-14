@@ -2,7 +2,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export type LegalSection = { heading: string; body: string[] };
 
-/** Shared shell for privacy, cookies, terms, shipping and size-guide copy. */
+/** Shared shell for privacy, cookies, terms and shipping copy. */
 export function LegalPage({
   title,
   intro,

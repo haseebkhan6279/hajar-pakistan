@@ -122,11 +122,20 @@ function OrderDetail({
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm text-hj-ink">{item.name}</p>
                 <p className="mt-0.5 text-[11px] text-hj-muted">
-                  {[item.size, item.color].filter(Boolean).join(" · ")}
-                  {item.size || item.color ? " · " : ""}×{item.qty}
+                  {[
+                    item.color,
+                    ...(item.addons ?? []).map((a) =>
+                      a.price > 0
+                        ? `${a.label} (+${formatPrice(a.price)})`
+                        : a.label
+                    ),
+                    `×${item.qty}`,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
                 </p>
                 <p className="mt-1 text-xs text-hj-ink">
-                  {formatPrice(item.price * item.qty)}
+                  {formatPrice((item.unitPrice ?? item.price) * item.qty)}
                 </p>
               </div>
             </li>

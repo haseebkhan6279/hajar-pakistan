@@ -1,11 +1,12 @@
 "use client";
 
 import { useCart } from "@/components/cart/CartProvider";
-import type { Product } from "@/lib/data";
+import { addonsFor, type Product } from "@/lib/data";
 
 /**
  * The bag button that sits over a product image in the grid.
- * Adds the first size / colourway; the PDP is where real choices are made.
+ * Adds the first colourway with the default extras; the PDP is where real
+ * choices are made.
  */
 export function QuickAdd({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -19,9 +20,8 @@ export function QuickAdd({ product }: { product: Product }) {
       onClick={() =>
         addItem(
           product,
-          product.sizes[0] ??
-            (product.madeToMeasure ? "Made to measure" : "One size"),
           product.colors[0]?.name ?? "",
+          addonsFor(product.categorySlug).filter((a) => a.defaultOn),
           1
         )
       }

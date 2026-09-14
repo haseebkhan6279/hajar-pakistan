@@ -81,11 +81,6 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  sizes?: string[];
-
-  @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ColorDto)
   colors?: ColorDto[];
@@ -167,11 +162,6 @@ export class UpdateProductDto {
   @IsArray()
   @IsString({ each: true })
   highlights?: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  sizes?: string[];
 
   @IsOptional()
   @IsArray()

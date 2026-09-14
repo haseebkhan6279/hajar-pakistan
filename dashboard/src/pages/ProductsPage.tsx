@@ -109,7 +109,6 @@ export function ProductsPage() {
               <th className="px-4 py-3.5 font-medium">Piece</th>
               <th className="px-4 py-3.5 font-medium">Collection</th>
               <th className="px-4 py-3.5 font-medium">Price</th>
-              <th className="px-4 py-3.5 font-medium">Sizes</th>
               <th className="px-4 py-3.5 font-medium">Stock</th>
               <th className="px-4 py-3.5 font-medium">Status</th>
               <th className="px-4 py-3.5 font-medium text-right">Actions</th>
@@ -145,9 +144,6 @@ export function ProductsPage() {
                       {formatPrice(p.compareAtPrice)}
                     </span>
                   ) : null}
-                </td>
-                <td className="px-4 py-3 text-[11px] text-hj-muted">
-                  {p.sizes?.length ? p.sizes.join(" · ") : "—"}
                 </td>
                 <td
                   className={`px-4 py-3 ${p.stock <= 3 ? "text-hj-danger" : "text-hj-ink"}`}

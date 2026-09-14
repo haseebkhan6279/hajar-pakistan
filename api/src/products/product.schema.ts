@@ -39,10 +39,6 @@ export class Product {
   @Prop({ type: [String], default: [] })
   highlights: string[];
 
-  /** Apparel sizing — e.g. XS · S · M · L · XL or Unstitched */
-  @Prop({ type: [String], default: [] })
-  sizes: string[];
-
   /** Colourways shown as swatches on the PDP */
   @Prop({
     type: [{ name: { type: String }, hex: { type: String }, _id: false }],
@@ -93,7 +89,6 @@ export function toAdminProduct(doc: ProductDocument) {
     tags: o.tags ?? [],
     description: o.description ?? '',
     highlights: o.highlights ?? [],
-    sizes: o.sizes ?? [],
     colors: (o.colors ?? []).map((c: { name?: string; hex?: string }) => ({
       name: c.name ?? '',
       hex: c.hex ?? '#C6982C',

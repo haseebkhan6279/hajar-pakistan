@@ -16,7 +16,6 @@ export type AdminProduct = {
   tags: string[];
   description: string;
   highlights: string[];
-  sizes: string[];
   colors: ProductColor[];
   fabric: string;
   pieces: string;
@@ -71,7 +70,11 @@ export type OrderItem = {
   slug: string;
   price: number;
   qty: number;
-  size: string;
+  // Extras chosen with the piece; unitPrice already includes them
+  addons?: { id: string; label: string; price: number }[];
+  unitPrice?: number;
+  // Only on orders placed before sizes were dropped
+  size?: string;
   color: string;
   image: string;
 };
@@ -91,8 +94,6 @@ export type AdminOrder = {
 };
 
 /** Suit sizing offered across the catalogue. */
-export const SIZE_PRESET = ["XS", "S", "M", "L", "XL", "XXL"];
-
 export const PIECE_PRESET = [
   "1 Piece",
   "2 Piece",

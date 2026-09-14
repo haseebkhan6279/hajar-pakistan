@@ -4,6 +4,17 @@ export const ORDER_PREFIX = 'HJ';
 export const UPLOAD_FOLDER = 'hajar/products';
 
 /**
+ * Extras a customer can tick on a product, by id, with the PKR amount each
+ * adds to the unit price. The order total is worked out from this table rather
+ * than the figure the browser sends. Mirrors COLLECTION_ADDONS in
+ * web/src/lib/data.ts.
+ */
+export const ADDONS: Record<string, { label: string; price: number }> = {
+  dupatta: { label: 'Add Dupatta', price: 0 },
+  sleeves: { label: 'Add Sleeves', price: 10000 },
+};
+
+/**
  * Two houses. HAJAR carries the ZOUQ 1 and ZOUQ 2 lines; HAJAR BY NAZISH ALI
  * is the couture line and stands alone. Products are filed against a leaf —
  * ZOUQ 1, ZOUQ 2 or HAJAR BY NAZISH ALI — never against the HAJAR parent.

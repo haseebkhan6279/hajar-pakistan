@@ -165,14 +165,6 @@ export default async function PolicyPage({ params }: { params: Params }) {
                 Privacy policy
               </Link>
             </li>
-            <li>
-              <Link
-                href="/size-guide"
-                className="text-sm text-hj-muted transition-colors hover:text-hj-gold-deep"
-              >
-                Size guide
-              </Link>
-            </li>
           </ul>
         </nav>
       </div>
