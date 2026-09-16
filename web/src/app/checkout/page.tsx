@@ -298,7 +298,7 @@ export default function CheckoutPage() {
                     alt={l.product.name}
                     fill
                     sizes="56px"
-                    className="object-cover"
+                    className="object-cover object-top"
                   />
                 </div>
                 <div className="min-w-0 flex-1">

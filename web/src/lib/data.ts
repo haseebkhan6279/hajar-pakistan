@@ -68,7 +68,14 @@ export const COLLECTION_ADDONS: Record<string, ProductAddon[]> = {
   ],
 };
 
-export function addonsFor(categorySlug: string): ProductAddon[] {
+/** Pieces that already include the look — no dupatta / sleeve extras. */
+const ADDON_EXCLUDED_SLUGS = new Set(["blush-hour"]);
+
+export function addonsFor(
+  categorySlug: string,
+  productSlug?: string
+): ProductAddon[] {
+  if (productSlug && ADDON_EXCLUDED_SLUGS.has(productSlug)) return [];
   return COLLECTION_ADDONS[categorySlug] ?? [];
 }
 

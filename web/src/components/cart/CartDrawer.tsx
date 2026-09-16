@@ -106,7 +106,7 @@ export function CartDrawer() {
                         alt={line.product.name}
                         fill
                         sizes="80px"
-                        className="object-cover"
+                        className="object-cover object-top"
                       />
                     </Link>
 

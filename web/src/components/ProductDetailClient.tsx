@@ -15,7 +15,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
   const [openPanel, setOpenPanel] = useState<string | null>("details");
 
-  const addons = addonsFor(product.categorySlug);
+  const addons = addonsFor(product.categorySlug, product.slug);
   const [picked, setPicked] = useState<string[]>(
     addons.filter((a) => a.defaultOn).map((a) => a.id)
   );
@@ -121,7 +121,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="object-cover object-top"
           />
           {product.badge && (
             <span className="absolute left-4 top-4 bg-hj-ink px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] text-hj-gold-soft">
@@ -145,7 +145,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                     : "opacity-60 hover:opacity-100"
                 )}
               >
-                <Image src={src} alt="" fill sizes="80px" className="object-cover" />
+                <Image src={src} alt="" fill sizes="80px" className="object-cover object-top" />
               </button>
             ))}
           </div>

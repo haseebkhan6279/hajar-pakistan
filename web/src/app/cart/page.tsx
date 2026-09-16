@@ -64,7 +64,7 @@ export default function CartPage() {
                       alt={line.product.name}
                       fill
                       sizes="144px"
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                   </Link>
 

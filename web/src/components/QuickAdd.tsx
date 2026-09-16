@@ -21,7 +21,7 @@ export function QuickAdd({ product }: { product: Product }) {
         addItem(
           product,
           product.colors[0]?.name ?? "",
-          addonsFor(product.categorySlug).filter((a) => a.defaultOn),
+          addonsFor(product.categorySlug, product.slug).filter((a) => a.defaultOn),
           1
         )
       }
