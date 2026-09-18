@@ -75,7 +75,7 @@ export function Wordmark({
         <span className="block font-display text-2xl font-semibold tracking-brand text-hj-ink">
           HAJAR
         </span>
-        <span className="mt-1 block text-[9px] uppercase tracking-[0.22em] text-hj-gold-deep">
+        <span className="hj-byline mt-1 block">
           by Nazish Ali
         </span>
       </span>

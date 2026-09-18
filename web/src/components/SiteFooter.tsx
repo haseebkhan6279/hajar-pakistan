@@ -85,7 +85,7 @@ export function SiteFooter() {
               <span className="block font-display text-xl tracking-[0.28em] text-hj-ink">
                 HAJAR
               </span>
-              <span className="mt-1.5 block text-[8px] uppercase tracking-[0.24em] text-hj-gold-deep">
+              <span className="hj-byline mt-1.5 block">
                 by Nazish Ali
               </span>
             </span>

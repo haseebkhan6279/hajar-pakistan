@@ -77,7 +77,7 @@ export default async function HomePage() {
             <span className="block font-display text-5xl font-light tracking-[0.35em]">
               HAJAR
             </span>
-            <span className="mt-3 block text-[11px] uppercase tracking-[0.32em] text-hj-gold-deep">
+            <span className="hj-byline mt-3 block">
               by Nazish Ali
             </span>
           </h1>

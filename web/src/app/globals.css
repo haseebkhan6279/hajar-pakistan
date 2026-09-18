@@ -19,6 +19,8 @@
   --hj-gold: #ddbd6c;
   --hj-gold-soft: #edd68f;
   --hj-gold-deep: #8b5e2b;
+  /* Bylines on white — same family as the mark, not the brown deep gold. */
+  --hj-gold-line: #c49a3c;
   --hj-gold-wash: #fdf8ea;
 
   --hj-danger: #a83a32;
@@ -38,6 +40,7 @@
   --color-hj-gold: var(--hj-gold);
   --color-hj-gold-soft: var(--hj-gold-soft);
   --color-hj-gold-deep: var(--hj-gold-deep);
+  --color-hj-gold-line: var(--hj-gold-line);
   --color-hj-gold-wash: var(--hj-gold-wash);
   --color-hj-danger: var(--hj-danger);
   --color-hj-success: var(--hj-success);
@@ -88,6 +91,15 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--hj-muted);
+}
+
+/* "by Nazish Ali" under HAJAR — brighter gold than body captions */
+.hj-byline {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hj-gold-line);
 }
 
 /* Hairline gold rule that opens most sections */

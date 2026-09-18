@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
 import { Price } from "@/components/currency/Price";
 import { addonsFor, savePercent, type Product } from "@/lib/data";
+import { catalogImageProps } from "@/lib/catalog";
 import { cn } from "@/lib/clsx";
 
 export function ProductDetailClient({ product }: { product: Product }) {
@@ -122,6 +123,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover object-top"
+            {...catalogImageProps(product.images[active])}
           />
           {product.badge && (
             <span className="absolute left-4 top-4 bg-hj-ink px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] text-hj-gold-soft">
@@ -145,7 +147,14 @@ export function ProductDetailClient({ product }: { product: Product }) {
                     : "opacity-60 hover:opacity-100"
                 )}
               >
-                <Image src={src} alt="" fill sizes="80px" className="object-cover object-top" />
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  sizes="80px"
+                  className="object-cover object-top"
+                  {...catalogImageProps(src)}
+                />
               </button>
             ))}
           </div>

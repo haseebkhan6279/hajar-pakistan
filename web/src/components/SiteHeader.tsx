@@ -109,7 +109,7 @@ export function SiteHeader() {
               <span className="font-display text-[20px] font-light tracking-[0.36em] text-hj-ink md:text-[24px]">
                 HAJAR
               </span>
-              <span className="mt-1.5 text-[8px] uppercase tracking-[0.28em] text-hj-gold-deep md:text-[9px]">
+              <span className="hj-byline mt-1.5">
                 by Nazish Ali
               </span>
             </span>
@@ -243,7 +243,7 @@ export function SiteHeader() {
             <LogoMark size={36} />
             <span className="flex flex-col leading-none">
               <span className="font-display text-xl tracking-[0.32em]">HAJAR</span>
-              <span className="mt-1 text-[8px] uppercase tracking-[0.28em] text-hj-gold">
+              <span className="hj-byline mt-1">
                 by Nazish Ali
               </span>
             </span>

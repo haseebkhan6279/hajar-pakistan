@@ -44,6 +44,16 @@ const API_URL =
  */
 export const PLACEHOLDER_IMAGE = "/media/placeholder.jpg";
 
+/** Local catalogue photos must not go through `/_next/image`.
+ * WhatsApp-sized files (often ~700px) get upscaled and recompressed there,
+ * which is what makes Lunara / Elara look soft on the PDP. */
+export function catalogImageProps(src: string) {
+  return {
+    quality: 90 as const,
+    unoptimized: src.startsWith("/"),
+  };
+}
+
 /**
  * Short display reference built from the slug. Cuts on a word boundary so it
  * never reads as a truncated word — "PEARL-HALTER", not "PEARL-HALTER-K".

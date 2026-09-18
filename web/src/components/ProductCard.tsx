@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Price } from "@/components/currency/Price";
+import { catalogImageProps } from "@/lib/catalog";
 import { savePercent, type Product } from "@/lib/data";
 import { productPath } from "@/lib/paths";
 import { cn } from "@/lib/clsx";
@@ -28,6 +29,7 @@ export function ProductCard({
               priority={priority}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="card-img object-cover object-top"
+              {...catalogImageProps(product.images[0])}
             />
             {product.images[1] && (
               <Image
@@ -36,6 +38,7 @@ export function ProductCard({
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 className="object-cover object-top opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                {...catalogImageProps(product.images[1])}
               />
             )}
           </div>

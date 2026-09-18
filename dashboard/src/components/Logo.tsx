@@ -27,7 +27,7 @@ export function Wordmark({ subtitle }: { subtitle?: string }) {
         <p className="font-display text-xl font-semibold tracking-brand text-hj-ink">
           HAJAR
         </p>
-        <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-hj-gold-deep">
+        <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.24em] text-hj-gold">
           by Nazish Ali
         </p>
         {subtitle && (
