@@ -124,6 +124,103 @@ const PRODUCTS = [
     "seoDescription": "Moonlight Pearl is a handcrafted luxury ensemble in a soft coconut milk ivory shade, featuring a modern halter neckline, intricately hand-embellished…"
   },
   {
+    "name": "Lunara",
+    "slug": "lunara",
+    "category": "HAJAR BY NAZISH ALI",
+    "price": 229000,
+    "stock": 100,
+    "status": "published",
+    "tags": [
+      "new"
+    ],
+    "fabric": "Lamba silk, organza",
+    "pieces": "3 Piece",
+    "description": "Lunara: A Whisper of Blue, Crafted to Be Remembered.\n\nThis exquisite ensemble brings together traditional craftsmanship and a graceful contemporary silhouette. The lamba silk lehenga choli is intricately adorned with hand-worked zardozi and delicate pearls, creating a luminous texture that catches the light with every movement.\n\nLayered over the ensemble is a flowing organza gown, beautifully hand-embellished with kora, dabka, zardozi and pearls. Its elongated back cascades into a dramatic train, lending the silhouette an effortless sense of grandeur.\n\nAn ethereal organza dupatta, finished with coordinating hand embellishment, completes the look—softening the structured craftsmanship with delicate movement.\n\nRomantic yet commanding, this creation is designed for celebrations where tradition meets modern elegance.",
+    "highlights": [
+      "Hand-worked zardozi",
+      "Kora and dabka",
+      "Hand-set pearls",
+      "Organza train"
+    ],
+    "colors": [
+      {
+        "name": "Whisper Blue",
+        "hex": "#C5D4CC"
+      }
+    ],
+    "specifications": [
+      {
+        "key": "Fabric",
+        "value": "lamba silk, organza"
+      },
+      {
+        "key": "Colour",
+        "value": "ice blue"
+      },
+      {
+        "key": "Care",
+        "value": "Dry clean only"
+      }
+    ],
+    "images": [
+      "/products/lunara/01.jpg",
+      "/products/lunara/02.jpg",
+      "/products/lunara/03.jpg",
+      "/products/lunara/04.jpg",
+      "/products/lunara/05.jpg"
+    ],
+    "seoTitle": "Lunara — HAJAR BY NAZISH ALI | HAJAR",
+    "seoDescription": "A lamba silk lehenga choli with hand-worked zardozi and pearls, layered with a flowing organza gown and a coordinating organza dupatta."
+  },
+  {
+    "name": "Elara",
+    "slug": "elara",
+    "category": "HAJAR BY NAZISH ALI",
+    "price": 84000,
+    "stock": 100,
+    "status": "published",
+    "tags": [
+      "new"
+    ],
+    "fabric": "Silk, net",
+    "pieces": "3 Piece",
+    "description": "ELARA — Luxury in every detail.\n\nA study in cold luminosity. The fitted silk blouse is fully hand-beaded in a geometric lattice of silver and ice blue beadwork, structured across the bodice like architecture. Layered over it, a sheer net cape is scattered with silver floral beaded motifs and finished with a beaded fringe hem that moves with the body — light, kinetic, and entirely hand-finished. A matching silk drape skirt in ice blue completes the silhouette, falling in soft, fluid movement.\n\nDesigned for the woman who wants her formalwear to feel engineered, not just embellished.",
+    "highlights": [
+      "Hand-beaded lattice",
+      "Silver floral motifs",
+      "Beaded fringe hem"
+    ],
+    "colors": [
+      {
+        "name": "Ice Blue",
+        "hex": "#A9D0CC"
+      }
+    ],
+    "specifications": [
+      {
+        "key": "Fabric",
+        "value": "silk, net"
+      },
+      {
+        "key": "Colour",
+        "value": "ice blue, silver"
+      },
+      {
+        "key": "Care",
+        "value": "Dry clean only"
+      }
+    ],
+    "images": [
+      "/products/elara/01.jpg",
+      "/products/elara/02.jpg",
+      "/products/elara/03.jpg",
+      "/products/elara/04.jpg",
+      "/products/elara/05.jpg"
+    ],
+    "seoTitle": "Elara — HAJAR BY NAZISH ALI | HAJAR",
+    "seoDescription": "A fitted silk blouse in a geometric lattice of silver and ice blue beadwork, layered with a sheer net cape and a matching silk drape skirt."
+  },
+  {
     "name": "Subh-e-Feroza",
     "slug": "subh-e-feroza",
     "category": "ZOUQ 1",
@@ -795,32 +892,50 @@ async function main() {
   const products = mongoose.connection.collection('products');
   const categories = mongoose.connection.collection('categories');
 
-  for (const c of CATEGORIES) {
-    // A parent has no products of its own — borrow a cover from a child
-    const childNames = CATEGORIES.filter((x) => x.parentSlug === c.slug).map(
-      (x) => x.name,
+  const onlySlugs = (process.env.ONLY_SLUGS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const toUpsert = onlySlugs.length
+    ? PRODUCTS.filter((p) => onlySlugs.includes(p.slug))
+    : PRODUCTS;
+
+  if (onlySlugs.length && toUpsert.length !== onlySlugs.length) {
+    console.error(
+      'Unknown slug(s): ' +
+        onlySlugs.filter((s) => !PRODUCTS.some((p) => p.slug === s)).join(', '),
     );
-    const pool = PRODUCTS.filter(
-      (p) => (p.category === c.name || childNames.includes(p.category)) && p.images.length,
-    );
-    const picked = c.coverSlug
-      ? pool.find((p) => p.slug === c.coverSlug)
-      : undefined;
-    const cover = (picked ?? pool[0])?.images[0] ?? '';
-    const { coverSlug, ...record } = c;
-    void coverSlug;
-    await categories.updateOne(
-      { slug: c.slug },
-      {
-        $set: { ...record, image: cover, updatedAt: new Date() },
-        $setOnInsert: { createdAt: new Date() },
-      },
-      { upsert: true },
-    );
-    console.log('  collection  ' + c.name);
+    process.exit(1);
   }
 
-  for (const p of PRODUCTS) {
+  if (!onlySlugs.length) {
+    for (const c of CATEGORIES) {
+      // A parent has no products of its own — borrow a cover from a child
+      const childNames = CATEGORIES.filter((x) => x.parentSlug === c.slug).map(
+        (x) => x.name,
+      );
+      const pool = PRODUCTS.filter(
+        (p) => (p.category === c.name || childNames.includes(p.category)) && p.images.length,
+      );
+      const picked = c.coverSlug
+        ? pool.find((p) => p.slug === c.coverSlug)
+        : undefined;
+      const cover = (picked ?? pool[0])?.images[0] ?? '';
+      const { coverSlug, ...record } = c;
+      void coverSlug;
+      await categories.updateOne(
+        { slug: c.slug },
+        {
+          $set: { ...record, image: cover, updatedAt: new Date() },
+          $setOnInsert: { createdAt: new Date() },
+        },
+        { upsert: true },
+      );
+      console.log('  collection  ' + c.name);
+    }
+  }
+
+  for (const p of toUpsert) {
     await products.updateOne(
       { slug: p.slug },
       {
@@ -837,7 +952,11 @@ async function main() {
   }
 
   console.log(
-    '\n' + CATEGORIES.length + ' collections and ' + PRODUCTS.length + ' products upserted.',
+    '\n' +
+      (onlySlugs.length ? '0' : String(CATEGORIES.length)) +
+      ' collections and ' +
+      toUpsert.length +
+      ' products upserted.',
   );
   await mongoose.disconnect();
 }

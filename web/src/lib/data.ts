@@ -69,7 +69,7 @@ export const COLLECTION_ADDONS: Record<string, ProductAddon[]> = {
 };
 
 /** Pieces that already include the look — no dupatta / sleeve extras. */
-const ADDON_EXCLUDED_SLUGS = new Set(["blush-hour"]);
+const ADDON_EXCLUDED_SLUGS = new Set(["blush-hour", "elara", "lunara"]);
 
 export function addonsFor(
   categorySlug: string,
@@ -407,6 +407,8 @@ export const LOOKBOOK_COVERS: Record<string, { product: string; image: number }>
  * most recently updated pieces so it is never empty.
  */
 export const FEATURED_SLUGS = [
+  "lunara",
+  "elara",
   "moonlight-pearl",
   "lilac-eclat",
   "blush-hour",
