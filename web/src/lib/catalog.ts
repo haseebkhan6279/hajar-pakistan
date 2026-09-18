@@ -44,13 +44,15 @@ const API_URL =
  */
 export const PLACEHOLDER_IMAGE = "/media/placeholder.jpg";
 
-/** Local catalogue photos must not go through `/_next/image`.
- * WhatsApp-sized files (often ~700px) get upscaled and recompressed there,
- * which is what makes Lunara / Elara look soft on the PDP. */
+/** Serve catalogue photos as uploaded.
+ * Running them through `/_next/image` upscales WhatsApp-sized Shopify
+ * files (Lunara is 682px wide) and recompresses them, which is why they
+ * look soft on the product page. */
 export function catalogImageProps(src: string) {
+  void src;
   return {
     quality: 90 as const,
-    unoptimized: src.startsWith("/"),
+    unoptimized: true,
   };
 }
 

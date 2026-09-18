@@ -166,8 +166,7 @@ const PRODUCTS = [
       "/products/lunara/01.jpg",
       "/products/lunara/02.jpg",
       "/products/lunara/03.jpg",
-      "/products/lunara/04.jpg",
-      "/products/lunara/05.jpg"
+      "/products/lunara/04.jpg"
     ],
     "seoTitle": "Lunara — HAJAR BY NAZISH ALI | HAJAR",
     "seoDescription": "A lamba silk lehenga choli with hand-worked zardozi and pearls, layered with a flowing organza gown and a coordinating organza dupatta."

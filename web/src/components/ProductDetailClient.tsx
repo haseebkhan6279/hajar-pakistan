@@ -115,14 +115,15 @@ export function ProductDetailClient({ product }: { product: Product }) {
           thumbnail rail below sets the column to its min-content width and the
           whole page scrolls sideways instead of the rail scrolling. */}
       <div className="min-w-0">
-        <div className="relative aspect-[3/4] overflow-hidden bg-hj-sand">
+        <div className="relative overflow-hidden bg-hj-sand">
           <Image
             src={product.images[active]}
             alt={`${product.name} — view ${active + 1}`}
-            fill
+            width={1024}
+            height={1536}
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover object-top"
+            className="h-auto w-full"
             {...catalogImageProps(product.images[active])}
           />
           {product.badge && (
