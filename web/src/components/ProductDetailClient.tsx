@@ -38,6 +38,10 @@ export function ProductDetailClient({ product }: { product: Product }) {
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean);
+  // The opening line is the house line for the piece; it sits under the
+  // price, and the rest of the copy goes in Details & fabric
+  const tagline = paragraphs.length > 1 ? paragraphs[0] : "";
+  const body = tagline ? paragraphs.slice(1) : paragraphs;
 
   const panels = [
     {
@@ -45,19 +49,10 @@ export function ProductDetailClient({ product }: { product: Product }) {
       title: "Details & fabric",
       content: (
         <div className="space-y-4">
-          {paragraphs.length > 0 && (
+          {body.length > 0 && (
             <div className="max-w-prose space-y-3.5">
-              {paragraphs.map((para, i) => (
-                <p
-                  key={i}
-                  className={cn(
-                    "text-sm leading-relaxed",
-                    // The opening line is the house line for the piece
-                    i === 0 && paragraphs.length > 1
-                      ? "italic text-hj-gold-deep"
-                      : "text-hj-ink-soft"
-                  )}
-                >
+              {body.map((para, i) => (
+                <p key={i} className="text-sm leading-relaxed text-hj-ink-soft">
                   {para}
                 </p>
               ))}
@@ -227,6 +222,12 @@ export function ProductDetailClient({ product }: { product: Product }) {
         {product.pieces && (
           <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-hj-muted">
             {product.pieces}
+          </p>
+        )}
+
+        {tagline && (
+          <p className="mt-5 max-w-prose font-display text-lg italic leading-snug text-hj-gold-deep">
+            {tagline}
           </p>
         )}
 
