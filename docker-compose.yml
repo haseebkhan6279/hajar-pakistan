@@ -1,5 +1,8 @@
 # HAJAR on Hostinger VPS — host ports chosen to avoid existing stacks.
 # Storefront :3311 · API :3310 · Dashboard :3312
+#
+# Uses public images + git clone at start (Hostinger Docker Manager does not
+# reliably build from remote git contexts on this VPS).
 services:
   mongo:
     image: mongo:7
@@ -13,12 +16,11 @@ services:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 12
 
   api:
-    build:
-      context: https://github.com/haseebkhan6279/hajar-pakistan.git#main
-      dockerfile: api/Dockerfile
+    image: node:22-bookworm
+    working_dir: /src
     restart: unless-stopped
     ports:
       - "3310:3000"
@@ -33,32 +35,62 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    command:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+        apt-get update -qq && apt-get install -y -qq git >/dev/null
+        git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        cd /src
+        npm ci
+        npm run build -w api
+        exec node api/dist/main.js
 
   web:
-    build:
-      context: https://github.com/haseebkhan6279/hajar-pakistan.git#main
-      dockerfile: web/Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    image: node:22-bookworm
+    working_dir: /src
     restart: unless-stopped
     ports:
       - "3311:3001"
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      PORT: "3001"
     depends_on:
       - api
+    command:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+        apt-get update -qq && apt-get install -y -qq git >/dev/null
+        git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        cd /src
+        npm ci
+        npm run build -w web
+        exec npm run start -w web
 
   dashboard:
-    build:
-      context: https://github.com/haseebkhan6279/hajar-pakistan.git#main
-      dockerfile: dashboard/Dockerfile
-      args:
-        VITE_API_URL: ${VITE_API_URL}
+    image: node:22-bookworm
+    working_dir: /src
     restart: unless-stopped
     ports:
-      - "3312:80"
+      - "3312:4173"
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
     depends_on:
       - api
+    command:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+        apt-get update -qq && apt-get install -y -qq git >/dev/null
+        git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        cd /src
+        npm ci
+        npm run build -w dashboard
+        exec npx --yes serve -s dashboard/dist -l 4173
 
 volumes:
   hajar_mongo_data:
