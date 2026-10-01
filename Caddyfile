@@ -1,0 +1,14 @@
+hajar.pk, www.hajar.pk {
+	encode gzip
+	reverse_proxy web:3001
+}
+
+api.hajar.pk {
+	encode gzip
+	reverse_proxy api:3000
+}
+
+admin.hajar.pk {
+	encode gzip
+	reverse_proxy dashboard:4173
+}

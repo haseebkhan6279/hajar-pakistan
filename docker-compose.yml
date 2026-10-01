@@ -1,8 +1,6 @@
-# HAJAR on Hostinger VPS — host ports chosen to avoid existing stacks.
-# Storefront :3311 · API :3310 · Dashboard :3312
-#
-# Uses public images + git clone at start (Hostinger Docker Manager does not
-# reliably build from remote git contexts on this VPS).
+# HAJAR on Hostinger VPS
+# Public: https://hajar.pk · https://api.hajar.pk · https://admin.hajar.pk
+# Direct ports kept for debugging: API :3310 · web :3311 · admin :3312
 services:
   mongo:
     image: mongo:7
@@ -106,5 +104,22 @@ services:
         npm run build -w dashboard
         exec npx --yes serve -s dashboard/dist -l 4173
 
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - hajar_caddy_data:/data
+      - hajar_caddy_config:/config
+    depends_on:
+      - api
+      - web
+      - dashboard
+
 volumes:
   hajar_mongo_data:
+  hajar_caddy_data:
+  hajar_caddy_config:
