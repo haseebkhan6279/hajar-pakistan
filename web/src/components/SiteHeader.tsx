@@ -10,6 +10,7 @@ import { childCollections, HOUSES } from "@/lib/data";
 import { cn } from "@/lib/clsx";
 
 const NAV = [
+  { href: "/", label: "Home", match: "/", children: [] },
   ...HOUSES.map((house) => {
     const kids = childCollections(house.slug);
     return {
@@ -213,6 +214,31 @@ export function SiteHeader() {
                   >
                     {item.label}
                   </Link>
+                  {/* Sub-collections drop down on hover or keyboard focus;
+                      pt-3 bridges the gap so the pointer can reach them */}
+                  {item.children.length > 0 && (
+                    <div className="invisible absolute -left-5 top-full z-50 translate-y-1 pt-3 opacity-0 transition-[opacity,transform] duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                      {/* -left-5 with px-5: the items start exactly under the
+                          parent label's first letter */}
+                      <ul className="border-t border-hj-gold bg-white px-5 py-3 text-left shadow-[0_10px_30px_rgba(10,10,10,0.08)]">
+                        {item.children.map((child) => (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              className={cn(
+                                "block whitespace-nowrap py-2 text-[10px] uppercase tracking-[0.2em] transition-colors",
+                                pathname.startsWith(child.href)
+                                  ? "text-hj-gold-deep"
+                                  : "text-hj-ink hover:text-hj-gold-deep"
+                              )}
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </li>
               );
             })}
