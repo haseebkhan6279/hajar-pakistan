@@ -1,6 +1,9 @@
 # HAJAR on Hostinger VPS
 # Public: https://hajar.pk · https://api.hajar.pk · https://admin.hajar.pk
-# Direct ports kept for debugging: API :3310 · web :3311 · admin :3312
+# Direct: API :3310 · web :3311 · admin :3312
+#
+# Port 80 is taken on this VPS, so Caddy publishes HTTPS on :443 only
+# (TLS-ALPN-01). Point DNS A records for @/www/api/admin to 187.127.213.181.
 services:
   mongo:
     image: mongo:7
@@ -108,7 +111,6 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     ports:
-      - "80:80"
       - "443:443"
     volumes:
       - hajar_caddy_data:/data
@@ -117,12 +119,13 @@ services:
       - api
       - web
       - dashboard
-    # Hostinger only materialises docker-compose.yml on the server, so the
-    # Caddyfile cannot be bind-mounted from the repo — write it at start.
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
         cat > /etc/caddy/Caddyfile <<'EOF'
+        {
+          auto_https disable_redirects
+        }
         hajar.pk, www.hajar.pk {
           encode gzip
           reverse_proxy web:3001
