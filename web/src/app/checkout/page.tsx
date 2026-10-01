@@ -11,6 +11,7 @@ import { formatPrice } from "@/lib/data";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ButtonLink } from "@/components/ui/Button";
+import { SITE } from "@/lib/seo";
 
 const PK_PROVINCES = [
   "Punjab",
@@ -269,6 +270,21 @@ export default function CheckoutPage() {
                   with the available payment options. Made-to-order pieces are
                   confirmed with a 50% advance, with the balance due before
                   dispatch; production begins once that advance is received.
+                </p>
+                <dl className="mt-4 grid gap-3 border-t border-hj-gold/40 pt-4 text-[13px] sm:grid-cols-2">
+                  <div>
+                    <dt className="eyebrow">Bank</dt>
+                    <dd className="mt-1 text-hj-ink">{SITE.bank.name}</dd>
+                  </div>
+                  <div>
+                    <dt className="eyebrow">Account number</dt>
+                    <dd className="mt-1 font-mono text-hj-ink">{SITE.bank.account}</dd>
+                  </div>
+                </dl>
+                <p className="mt-3 text-[13px] leading-relaxed text-hj-muted">
+                  For a bank transfer, please share the payment receipt with us
+                  on WhatsApp at {SITE.whatsappDisplay} along with your order
+                  number.
                 </p>
                 <p className="mt-2.5 text-[13px] leading-relaxed text-hj-muted">
                   See the{" "}

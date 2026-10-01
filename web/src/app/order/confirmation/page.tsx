@@ -36,6 +36,24 @@ async function Confirmation({ searchParams }: { searchParams: SearchParams }) {
         </div>
       )}
 
+      <div className="mx-auto mt-10 max-w-md border border-hj-gold bg-hj-gold-wash px-6 py-5 text-left">
+        <p className="eyebrow">Bank transfer</p>
+        <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-[12px] text-hj-muted">Bank</dt>
+            <dd className="mt-0.5 text-hj-ink">{SITE.bank.name}</dd>
+          </div>
+          <div>
+            <dt className="text-[12px] text-hj-muted">Account number</dt>
+            <dd className="mt-0.5 font-mono text-hj-ink">{SITE.bank.account}</dd>
+          </div>
+        </dl>
+        <p className="mt-3 text-[13px] leading-relaxed text-hj-muted">
+          Please send the payment receipt on WhatsApp at{" "}
+          {SITE.whatsappDisplay} with your order number.
+        </p>
+      </div>
+
       <dl className="mx-auto mt-12 grid max-w-lg gap-6 border-t border-hj-border pt-10 text-left sm:grid-cols-3">
         {[
           ["Payment", "Arranged on confirmation"],

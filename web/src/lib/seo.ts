@@ -16,6 +16,7 @@ export const SITE = {
   currency: "PKR",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "923288883222",
   whatsappDisplay: "+92 328 8883222",
+  bank: { name: "Al Baraka", account: "1012562072016" },
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hajarpakistan@gmail.com",
   instagramHandle: "@hajarbynazishali",
   street: "26A J3, Johar Town",
