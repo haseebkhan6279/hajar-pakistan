@@ -35,13 +35,14 @@ const CATEGORIES = [
   { name: 'ZOUQ 1', slug: 'zouq-1', tagline: 'The founding edit.', parentSlug: 'hajar', sortOrder: 2, coverSlug: 'whimsical-charm' },
   { name: 'ZOUQ 2', slug: 'zouq-2', tagline: 'The second edit.', parentSlug: 'hajar', sortOrder: 3, coverSlug: 'frost-silhouette' },
   { name: 'HAJAR BY NAZISH ALI', slug: 'hajar-by-nazish-ali', tagline: 'Where craftsmanship becomes couture.', parentSlug: '', sortOrder: 4, coverSlug: 'moonlight-pearl' },
+  { name: 'QAMARA', slug: 'qamara', tagline: 'The moonlit edit.', parentSlug: 'hajar-by-nazish-ali', sortOrder: 5, coverSlug: 'moonlight-pearl' },
 ];
 
 const PRODUCTS = [
   {
     "name": "Blush Hour",
     "slug": "blush-hour",
-    "category": "HAJAR BY NAZISH ALI",
+    "category": "QAMARA",
     "price": 84600,
     "stock": 100,
     "status": "published",
@@ -83,7 +84,7 @@ const PRODUCTS = [
   {
     "name": "Moonlight Pearl",
     "slug": "moonlight-pearl",
-    "category": "HAJAR BY NAZISH ALI",
+    "category": "QAMARA",
     "price": 130000,
     "stock": 100,
     "status": "published",
@@ -126,7 +127,7 @@ const PRODUCTS = [
   {
     "name": "Lunara",
     "slug": "lunara",
-    "category": "HAJAR BY NAZISH ALI",
+    "category": "QAMARA",
     "price": 229000,
     "stock": 100,
     "status": "published",
@@ -174,7 +175,7 @@ const PRODUCTS = [
   {
     "name": "Elara",
     "slug": "elara",
-    "category": "HAJAR BY NAZISH ALI",
+    "category": "QAMARA",
     "price": 84000,
     "stock": 100,
     "status": "published",

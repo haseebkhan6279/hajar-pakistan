@@ -76,7 +76,12 @@ export function addonsFor(
   productSlug?: string
 ): ProductAddon[] {
   if (productSlug && ADDON_EXCLUDED_SLUGS.has(productSlug)) return [];
-  return COLLECTION_ADDONS[categorySlug] ?? [];
+  const parent = collectionBySlug(categorySlug)?.parentSlug;
+  return (
+    COLLECTION_ADDONS[categorySlug] ??
+    (parent ? COLLECTION_ADDONS[parent] : undefined) ??
+    []
+  );
 }
 
 export type Collection = {
@@ -90,8 +95,8 @@ export type Collection = {
 
 /**
  * Two houses. HAJAR carries the ZOUQ 1 and ZOUQ 2 edits; HAJAR BY NAZISH ALI is
- * the couture line and stands alone. Products are filed against a leaf, so the
- * HAJAR page aggregates its children. Mirrors api/src/common/brand.ts.
+ * the couture line and carries QAMARA. Products are filed against a leaf, so a
+ * house page aggregates its children. Mirrors api/src/common/brand.ts.
  */
 export const COLLECTIONS: Collection[] = [
   {
@@ -125,6 +130,13 @@ export const COLLECTIONS: Collection[] = [
     blurb: "",
     parentSlug: "",
   },
+  {
+    name: "QAMARA",
+    slug: "qamara",
+    tagline: "The moonlit edit.",
+    blurb: "",
+    parentSlug: "hajar-by-nazish-ali",
+  },
 ];
 
 /** Top-level houses, in nav order. */
@@ -136,8 +148,7 @@ export function childCollections(slug: string) {
 
 /** Every collection whose products belong under `slug` — itself plus children. */
 export function collectionFamily(slug: string): string[] {
-  const children = childCollections(slug).map((c) => c.slug);
-  return children.length ? children : [slug];
+  return [slug, ...childCollections(slug).map((c) => c.slug)];
 }
 
 /**

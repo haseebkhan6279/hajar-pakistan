@@ -16,8 +16,8 @@ export const ADDONS: Record<string, { label: string; price: number }> = {
 
 /**
  * Two houses. HAJAR carries the ZOUQ 1 and ZOUQ 2 lines; HAJAR BY NAZISH ALI
- * is the couture line and stands alone. Products are filed against a leaf —
- * ZOUQ 1, ZOUQ 2 or HAJAR BY NAZISH ALI — never against the HAJAR parent.
+ * is the couture line and carries QAMARA. Products are filed against a leaf —
+ * ZOUQ 1, ZOUQ 2 or QAMARA — never against a house.
  */
 export const DEFAULT_CATEGORIES = [
   {
@@ -47,5 +47,12 @@ export const DEFAULT_CATEGORIES = [
     tagline: 'Where craftsmanship becomes couture.',
     parentSlug: '',
     sortOrder: 4,
+  },
+  {
+    name: 'QAMARA',
+    slug: 'qamara',
+    tagline: 'The moonlit edit.',
+    parentSlug: 'hajar-by-nazish-ali',
+    sortOrder: 5,
   },
 ] as const;
