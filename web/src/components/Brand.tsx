@@ -72,7 +72,7 @@ export function Wordmark({
     >
       {showMark && <LogoMark size={38} />}
       <span className="leading-none">
-        <span className="block font-display text-2xl font-semibold tracking-brand text-hj-ink">
+        <span className="block font-display text-2xl font-semibold tracking-brand text-black">
           HAJAR
         </span>
         <span className="hj-byline mt-1 block">

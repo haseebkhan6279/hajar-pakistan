@@ -77,7 +77,7 @@ export function CartDrawer() {
             <Link
               href="/products"
               onClick={closeCart}
-              className="mt-8 inline-flex h-12 items-center bg-hj-ink px-7 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink"
+              className="mt-8 inline-flex h-12 items-center bg-hj-ink px-7 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
             >
               Browse the collections
             </Link>
@@ -178,7 +178,7 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="flex h-12 items-center justify-center bg-hj-ink text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink"
+                  className="flex h-12 items-center justify-center bg-hj-ink text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
                 >
                   Checkout
                 </Link>

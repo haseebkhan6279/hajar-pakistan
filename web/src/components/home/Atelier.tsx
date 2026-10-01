@@ -62,7 +62,7 @@ export function Atelier({
           */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -bottom-4 -left-4 hidden h-full w-full border border-hj-gold-soft sm:block"
+            className="pointer-events-none absolute -bottom-4 -left-4 hidden h-full w-full border border-hj-gold sm:block"
           />
 
           <div className="relative z-10 aspect-[4/5] overflow-hidden bg-hj-sand">

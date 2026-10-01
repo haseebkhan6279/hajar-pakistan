@@ -122,8 +122,7 @@ export const COLLECTIONS: Collection[] = [
     name: "HAJAR BY NAZISH ALI",
     slug: "hajar-by-nazish-ali",
     tagline: "Where craftsmanship becomes couture.",
-    blurb:
-      "Our exclusive signature line — kora, dabka, beads, crystals, pearls, cut dana and threadwork, set by hand on luxurious fabrics.",
+    blurb: "",
     parentSlug: "",
   },
 ];

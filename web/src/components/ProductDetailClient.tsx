@@ -45,6 +45,40 @@ export function ProductDetailClient({ product }: { product: Product }) {
       title: "Details & fabric",
       content: (
         <div className="space-y-4">
+          {paragraphs.length > 0 && (
+            <div className="max-w-prose space-y-3.5">
+              {paragraphs.map((para, i) => (
+                <p
+                  key={i}
+                  className={cn(
+                    "text-sm leading-relaxed",
+                    // The opening line is the house line for the piece
+                    i === 0 && paragraphs.length > 1
+                      ? "italic text-hj-gold-deep"
+                      : "text-hj-ink-soft"
+                  )}
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
+          )}
+          {product.highlights.length > 0 && (
+            <ul className="space-y-2">
+              {product.highlights.map((h) => (
+                <li
+                  key={h}
+                  className="flex gap-3 text-sm leading-relaxed text-hj-ink-soft"
+                >
+                  <span
+                    aria-hidden
+                    className="mt-2 h-1 w-1 shrink-0 rotate-45 bg-hj-gold"
+                  />
+                  {h}
+                </li>
+              ))}
+            </ul>
+          )}
           {product.fabric && (
             <p className="text-sm leading-relaxed text-hj-ink-soft">
               {product.fabric}
@@ -196,42 +230,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
           </p>
         )}
 
-        {paragraphs.length > 0 && (
-          <div className="mt-6 max-w-prose space-y-3.5">
-            {paragraphs.map((para, i) => (
-              <p
-                key={i}
-                className={cn(
-                  "text-sm leading-relaxed",
-                  // The opening line is the house line for the piece
-                  i === 0 && paragraphs.length > 1
-                    ? "italic text-hj-gold-deep"
-                    : "text-hj-ink-soft"
-                )}
-              >
-                {para}
-              </p>
-            ))}
-          </div>
-        )}
-
-        {product.highlights.length > 0 && (
-          <ul className="mt-6 space-y-2">
-            {product.highlights.map((h) => (
-              <li
-                key={h}
-                className="flex gap-3 text-sm leading-relaxed text-hj-ink-soft"
-              >
-                <span
-                  aria-hidden
-                  className="mt-2 h-1 w-1 shrink-0 rotate-45 bg-hj-gold"
-                />
-                {h}
-              </li>
-            ))}
-          </ul>
-        )}
-
         {/* Colour */}
         {product.colors.length > 1 && (
           <div className="mt-8">
@@ -334,7 +332,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
             type="button"
             disabled={soldOut}
             onClick={() => addItem(product, color, chosen, qty)}
-            className="h-14 flex-1 bg-hj-ink px-8 text-xs uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink disabled:cursor-not-allowed disabled:bg-hj-sand-2 disabled:text-hj-muted"
+            className="h-14 flex-1 bg-hj-ink px-8 text-xs uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white disabled:cursor-not-allowed disabled:bg-hj-sand-2 disabled:text-hj-muted"
           >
             {soldOut ? "Sold out" : "Add to bag"}
           </button>

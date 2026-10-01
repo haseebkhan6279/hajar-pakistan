@@ -74,7 +74,7 @@ export default async function HomePage() {
       ) : (
         <section className="flex h-[70vh] items-center justify-center">
           <h1 className="text-center">
-            <span className="block font-display text-5xl font-light tracking-[0.35em]">
+            <span className="block font-display text-5xl font-semibold tracking-[0.35em] text-black">
               HAJAR
             </span>
             <span className="hj-byline mt-3 block">

@@ -82,7 +82,7 @@ export function SiteFooter() {
           >
             <LogoMark size={40} />
             <span className="leading-none">
-              <span className="block font-display text-xl tracking-[0.28em] text-hj-ink">
+              <span className="block font-display text-xl font-semibold tracking-[0.28em] text-black">
                 HAJAR
               </span>
               <span className="hj-byline mt-1.5 block">

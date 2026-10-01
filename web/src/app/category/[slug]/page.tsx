@@ -17,7 +17,6 @@ import {
 } from "@/lib/catalog";
 import {
   COLLECTIONS,
-  HOUSES,
   childCollections,
   collectionBySlug,
 } from "@/lib/data";
@@ -120,8 +119,6 @@ export default async function CategoryPage({
   const parent = local?.parentSlug
     ? collectionBySlug(local.parentSlug)
     : undefined;
-  const houseSlug = parent?.slug ?? slug;
-  const siblings = HOUSES.filter((h) => h.slug !== houseSlug);
 
   const trail = [
     { name: "Home", href: "/" },
@@ -217,30 +214,6 @@ export default async function CategoryPage({
         </div>
         </>
         )}
-
-        {/* Sister collections */}
-        <nav className="mt-24 border-t border-hj-border pt-10">
-          <p className="eyebrow">Other collections</p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {siblings.map((c) => (
-              <ButtonLink
-                key={c.slug}
-                href={categoryPath(c.slug)}
-                variant="ghost"
-                size="lg"
-                className="h-auto! justify-between py-4"
-              >
-                <span className="text-left">
-                  <span className="block">{c.name}</span>
-                  <span className="mt-1 block font-display text-[14px] normal-case tracking-normal italic text-hj-gold-deep">
-                    {c.tagline}
-                  </span>
-                </span>
-                <span aria-hidden>→</span>
-              </ButtonLink>
-            ))}
-          </div>
-        </nav>
       </div>
     </div>
   );

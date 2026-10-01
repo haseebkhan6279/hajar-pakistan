@@ -180,7 +180,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={busy}
-        className="flex h-13 w-full items-center justify-center bg-hj-ink py-4 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink disabled:opacity-60"
+        className="flex h-13 w-full items-center justify-center bg-hj-ink py-4 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white disabled:opacity-60"
       >
         {busy ? "Sending…" : "Send enquiry"}
       </button>

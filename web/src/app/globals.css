@@ -16,11 +16,11 @@
   --hj-muted: #7a7263;
 
   /* Sampled from the gold calligraphy in the logo roundel. */
-  --hj-gold: #ddbd6c;
+  --hj-gold: #765712;
   --hj-gold-soft: #edd68f;
-  --hj-gold-deep: #8b5e2b;
+  --hj-gold-deep: #765712;
   /* Bylines on white — same family as the mark, not the brown deep gold. */
-  --hj-gold-line: #c49a3c;
+  --hj-gold-line: #765712;
   --hj-gold-wash: #fdf8ea;
 
   --hj-danger: #a83a32;
@@ -66,8 +66,8 @@ body {
 }
 
 ::selection {
-  background: var(--hj-gold-soft);
-  color: var(--hj-ink);
+  background: var(--hj-gold);
+  color: #ffffff;
 }
 
 /* The deep gold, not `--hj-gold`: a focus ring has to clear 3:1 against the
@@ -96,7 +96,7 @@ body {
 /* "by Nazish Ali" under HAJAR — brighter gold than body captions */
 .hj-byline {
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--hj-gold-line);
@@ -107,7 +107,7 @@ body {
   background: linear-gradient(
     90deg,
     var(--hj-gold) 0%,
-    var(--hj-gold-soft) 45%,
+    var(--hj-gold) 45%,
     transparent 100%
   );
 }

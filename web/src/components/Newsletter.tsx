@@ -47,7 +47,7 @@ export function Newsletter() {
       </label>
       <button
         type="submit"
-        className="h-12 shrink-0 bg-hj-ink px-7 text-[11px] uppercase tracking-[0.16em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink"
+        className="h-12 shrink-0 bg-hj-ink px-7 text-[11px] uppercase tracking-[0.16em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
       >
         Subscribe
       </button>

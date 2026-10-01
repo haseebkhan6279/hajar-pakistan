@@ -13,8 +13,8 @@ type Size = "sm" | "md" | "lg";
  */
 const VARIANTS: Record<Variant, string> = {
   solid:
-    "bg-hj-ink text-hj-gold-soft hover:bg-hj-gold hover:text-hj-ink border border-hj-ink hover:border-hj-gold",
-  gold: "bg-hj-gold text-hj-ink hover:bg-hj-ink hover:text-hj-gold-soft border border-hj-gold hover:border-hj-ink",
+    "bg-hj-ink text-hj-gold-soft hover:bg-hj-gold hover:text-white border border-hj-ink hover:border-hj-gold",
+  gold: "bg-hj-gold text-white hover:bg-hj-ink hover:text-hj-gold-soft border border-hj-gold hover:border-hj-ink",
   outline:
     "border border-hj-ink text-hj-ink hover:bg-hj-ink hover:text-hj-gold-soft",
   ghost:

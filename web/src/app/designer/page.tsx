@@ -37,7 +37,7 @@ function Portrait({ src, name }: { src?: string; name: string }) {
     <div className="relative mx-auto w-full max-w-[420px]">
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-4 -right-4 hidden h-full w-full border border-hj-gold-soft sm:block"
+        className="pointer-events-none absolute -bottom-4 -right-4 hidden h-full w-full border border-hj-gold sm:block"
       />
       <div className="relative z-10 aspect-[4/5] overflow-hidden bg-hj-sand">
         {src ? (
@@ -98,7 +98,7 @@ export default function DesignerPage() {
             ))}
           </div>
 
-          <p className="mt-8 max-w-[46ch] border-l border-hj-gold-soft pl-6 font-display text-[clamp(1.25rem,2.2vw,1.5rem)] italic leading-snug text-hj-ink">
+          <p className="mt-8 max-w-[46ch] border-l border-hj-gold pl-6 font-display text-[clamp(1.25rem,2.2vw,1.5rem)] italic leading-snug text-hj-ink">
             {DESIGNER.bridge}
           </p>
 

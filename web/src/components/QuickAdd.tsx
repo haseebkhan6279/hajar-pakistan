@@ -25,7 +25,7 @@ export function QuickAdd({ product }: { product: Product }) {
           1
         )
       }
-      className="absolute bottom-3 right-3 z-10 flex h-11 w-11 items-center justify-center bg-hj-ink text-hj-gold-soft opacity-0 transition-all duration-300 hover:bg-hj-gold hover:text-hj-ink focus-visible:opacity-100 group-hover:opacity-100 max-md:opacity-100"
+      className="absolute bottom-3 right-3 z-10 flex h-11 w-11 items-center justify-center bg-hj-ink text-hj-gold-soft opacity-0 transition-all duration-300 hover:bg-hj-gold hover:text-white focus-visible:opacity-100 group-hover:opacity-100 max-md:opacity-100"
     >
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
         <path

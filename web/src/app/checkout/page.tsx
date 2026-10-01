@@ -379,7 +379,7 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-7 flex h-14 w-full items-center justify-center bg-hj-ink text-xs uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink disabled:opacity-50"
+            className="mt-7 flex h-14 w-full items-center justify-center bg-hj-ink text-xs uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white disabled:opacity-50"
           >
             {submitting ? "Sending request…" : "Place order request"}
           </button>

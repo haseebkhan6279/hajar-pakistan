@@ -36,6 +36,7 @@ export function SiteHeader() {
   const { count, openCart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
   const [q, setQ] = useState("");
 
   const [scrolled, setScrolled] = useState(false);
@@ -43,6 +44,7 @@ export function SiteHeader() {
   useEffect(() => {
     setMenuOpen(false);
     setSearchOpen(false);
+    setExpanded(null);
   }, [pathname]);
 
   // Desktop folds the logo row away once the page is scrolled. The two
@@ -103,13 +105,22 @@ export function SiteHeader() {
             aria-label="HAJAR by Nazish Ali — home"
             className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2.5 md:gap-3"
           >
-            <LogoMark size={40} />
-            {/* Phones show the mark alone */}
-            <span className="hidden flex-col leading-none lg:flex">
-              <span className="font-display text-[20px] font-light tracking-[0.36em] text-hj-ink md:text-[24px]">
+            {/* Phones show the mark and byline only: mark and wordmark
+                together run into the currency switcher at 375px */}
+            <span className="flex flex-col items-center gap-1 leading-none sm:hidden">
+              <LogoMark size={34} />
+              <span className="hj-byline text-[8px]! tracking-[0.16em]!">
+                by Nazish Ali
+              </span>
+            </span>
+            <span className="hidden sm:flex">
+              <LogoMark size={40} />
+            </span>
+            <span className="hidden flex-col items-start leading-none sm:flex">
+              <span className="font-display text-[20px] font-semibold tracking-[0.36em] text-black md:text-[24px]">
                 HAJAR
               </span>
-              <span className="hj-byline mt-1.5">
+              <span className="hj-byline mt-1.5 text-[10px]! tracking-[0.24em]!">
                 by Nazish Ali
               </span>
             </span>
@@ -166,7 +177,7 @@ export function SiteHeader() {
                 />
               </svg>
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-hj-gold px-1 text-[10px] font-medium text-hj-ink">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-hj-gold px-1 text-[10px] font-medium text-white">
                   {count}
                 </span>
               )}
@@ -224,7 +235,7 @@ export function SiteHeader() {
             />
             <button
               type="submit"
-              className="h-11 bg-hj-ink px-7 text-[11px] uppercase tracking-[0.16em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-hj-ink"
+              className="h-11 bg-hj-ink px-7 text-[11px] uppercase tracking-[0.16em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
             >
               Search
             </button>
@@ -242,7 +253,7 @@ export function SiteHeader() {
           <span className="flex items-center gap-2.5">
             <LogoMark size={36} />
             <span className="flex flex-col leading-none">
-              <span className="font-display text-xl tracking-[0.32em]">HAJAR</span>
+              <span className="font-display text-xl font-semibold tracking-[0.32em]">HAJAR</span>
               <span className="hj-byline mt-1">
                 by Nazish Ali
               </span>
@@ -262,16 +273,60 @@ export function SiteHeader() {
 
         <nav className="overflow-y-auto px-6 pb-16">
           <ul>
-            {NAV.map((item) => (
-              <li key={item.href} className="border-b border-white/10">
-                <Link
-                  href={item.href}
-                  className="flex items-center py-4 text-[13px] uppercase tracking-[0.18em]"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {NAV.map((item) => {
+              // A house with sub-collections opens in place instead of
+              // navigating, so the volumes are reachable from the menu
+              if (item.children.length === 0) {
+                return (
+                  <li key={item.href} className="border-b border-white/10">
+                    <Link
+                      href={item.href}
+                      className="flex items-center py-4 text-[13px] uppercase tracking-[0.18em]"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              }
+              const open = expanded === item.href;
+              return (
+                <li key={item.href} className="border-b border-white/10">
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    onClick={() => setExpanded(open ? null : item.href)}
+                    className="flex w-full items-center justify-between py-4 text-left text-[13px] uppercase tracking-[0.18em]"
+                  >
+                    {item.label}
+                    <span aria-hidden className="text-lg leading-none">
+                      {open ? "−" : "+"}
+                    </span>
+                  </button>
+                  {open && (
+                    <ul className="pb-4 pl-4">
+                      <li>
+                        <Link
+                          href={item.href}
+                          className="block py-2.5 text-[12px] uppercase tracking-[0.16em] text-white/70"
+                        >
+                          View all
+                        </Link>
+                      </li>
+                      {item.children.map((child) => (
+                        <li key={child.href}>
+                          <Link
+                            href={child.href}
+                            className="block py-2.5 text-[12px] uppercase tracking-[0.16em] text-white/70"
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
