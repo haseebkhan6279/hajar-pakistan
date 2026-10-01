@@ -16,6 +16,7 @@
     "reset:admin": "node scripts/reset-admin.js",
     "seed:catalog": "node scripts/seed-catalog-products.js",
     "sync:collections": "node scripts/sync-collections.js",
+    "mirror:instagram": "node scripts/mirror-instagram.js",
     "migrate:atlas": "node scripts/migrate-to-atlas.js"
   },
   "dependencies": {
