@@ -1,0 +1,64 @@
+# HAJAR on Hostinger VPS — host ports chosen to avoid existing stacks.
+# Storefront :3311 · API :3310 · Dashboard :3312
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - hajar_mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: hajar
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: https://github.com/haseebkhan6279/hajar-pakistan.git#main
+      dockerfile: api/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3310:3000"
+    environment:
+      PORT: "3000"
+      MONGODB_URI: mongodb://hajar:${MONGO_PASSWORD}@mongo:27017/hajar?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      SEED_ON_BOOT: "true"
+      CORS_ORIGIN: ${CORS_ORIGIN}
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  web:
+    build:
+      context: https://github.com/haseebkhan6279/hajar-pakistan.git#main
+      dockerfile: web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    restart: unless-stopped
+    ports:
+      - "3311:3001"
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    depends_on:
+      - api
+
+  dashboard:
+    build:
+      context: https://github.com/haseebkhan6279/hajar-pakistan.git#main
+      dockerfile: dashboard/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    restart: unless-stopped
+    ports:
+      - "3312:80"
+    depends_on:
+      - api
+
+volumes:
+  hajar_mongo_data:
