@@ -111,13 +111,32 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - hajar_caddy_data:/data
       - hajar_caddy_config:/config
     depends_on:
       - api
       - web
       - dashboard
+    # Hostinger only materialises docker-compose.yml on the server, so the
+    # Caddyfile cannot be bind-mounted from the repo — write it at start.
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        cat > /etc/caddy/Caddyfile <<'EOF'
+        hajar.pk, www.hajar.pk {
+          encode gzip
+          reverse_proxy web:3001
+        }
+        api.hajar.pk {
+          encode gzip
+          reverse_proxy api:3000
+        }
+        admin.hajar.pk {
+          encode gzip
+          reverse_proxy dashboard:4173
+        }
+        EOF
+        exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
 
 volumes:
   hajar_mongo_data:
