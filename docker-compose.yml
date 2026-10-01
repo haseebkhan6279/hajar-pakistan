@@ -41,7 +41,11 @@ services:
       - |
         set -euo pipefail
         apt-get update -qq && apt-get install -y -qq git >/dev/null
-        git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        if [ ! -d /src/.git ]; then
+          git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        else
+          cd /src && git fetch --depth 1 origin main && git reset --hard origin/main
+        fi
         cd /src
         npm ci
         npm run build -w api
@@ -56,6 +60,7 @@ services:
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       PORT: "3001"
+      NODE_OPTIONS: --max-old-space-size=3072
     depends_on:
       - api
     command:
@@ -64,11 +69,16 @@ services:
       - |
         set -euo pipefail
         apt-get update -qq && apt-get install -y -qq git >/dev/null
-        git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        if [ ! -d /src/.git ]; then
+          git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        else
+          cd /src && git fetch --depth 1 origin main && git reset --hard origin/main
+        fi
         cd /src
         npm ci
         npm run build -w web
-        exec npm run start -w web
+        cd /src/web
+        exec npx next start -p 3001
 
   dashboard:
     image: node:22-bookworm
@@ -86,7 +96,11 @@ services:
       - |
         set -euo pipefail
         apt-get update -qq && apt-get install -y -qq git >/dev/null
-        git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        if [ ! -d /src/.git ]; then
+          git clone --depth 1 https://github.com/haseebkhan6279/hajar-pakistan.git /src
+        else
+          cd /src && git fetch --depth 1 origin main && git reset --hard origin/main
+        fi
         cd /src
         npm ci
         npm run build -w dashboard
