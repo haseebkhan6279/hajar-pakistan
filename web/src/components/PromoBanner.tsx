@@ -19,7 +19,7 @@ export function PromoBanner() {
 
   return (
     <div className="relative bg-hj-ink px-10 py-2.5 text-center">
-      <p className="text-[10px] uppercase tracking-[0.2em] text-hj-gold-soft">
+      <p className="text-[10px] uppercase tracking-[0.2em] text-[#b8913a]">
         Made to order in Lahore · Worldwide shipping · 50% advance to begin
         production
       </p>
@@ -34,7 +34,7 @@ export function PromoBanner() {
             // non-persistent dismissal is fine
           }
         }}
-        className="tap-target absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1 text-lg leading-none text-hj-gold-soft/70 transition-colors hover:text-hj-gold-soft"
+        className="tap-target absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1 text-lg leading-none text-[#b8913a]/70 transition-colors hover:text-[#b8913a]"
       >
         ×
       </button>
