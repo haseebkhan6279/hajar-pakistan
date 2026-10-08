@@ -27,11 +27,11 @@ services:
       - "3310:3000"
     environment:
       PORT: "3000"
-      MONGODB_URI: mongodb://hajar:${MONGO_PASSWORD}@mongo:27017/hajar?authSource=admin
+      MONGODB_URI: ${MONGODB_URI:-mongodb://hajar:${MONGO_PASSWORD}@mongo:27017/hajar?authSource=admin}
       JWT_SECRET: ${JWT_SECRET}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      SEED_ON_BOOT: "true"
+      SEED_ON_BOOT: ${SEED_ON_BOOT:-true}
       CORS_ORIGIN: ${CORS_ORIGIN}
     depends_on:
       mongo:
