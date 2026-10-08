@@ -33,6 +33,12 @@ services:
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       SEED_ON_BOOT: ${SEED_ON_BOOT:-true}
       CORS_ORIGIN: ${CORS_ORIGIN}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 900s
     depends_on:
       mongo:
         condition: service_healthy
@@ -62,8 +68,15 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       PORT: "3001"
       NODE_OPTIONS: --max-old-space-size=3072
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:3001/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 900s
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     command:
       - bash
       - -lc
@@ -90,7 +103,8 @@ services:
     environment:
       VITE_API_URL: ${VITE_API_URL}
     depends_on:
-      - api
+      web:
+        condition: service_healthy
     command:
       - bash
       - -lc
