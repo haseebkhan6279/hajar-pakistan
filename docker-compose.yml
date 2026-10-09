@@ -6,20 +6,6 @@
 # certificates from certbot), which proxies to the ports above. Ports 80/443
 # belong to that nginx, so this stack must not publish them.
 services:
-  mongo:
-    image: mongo:7
-    restart: unless-stopped
-    volumes:
-      - hajar_mongo_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: hajar
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-
   api:
     image: node:22-bookworm
     working_dir: /src
@@ -28,7 +14,7 @@ services:
       - "3310:3000"
     environment:
       PORT: "3000"
-      MONGODB_URI: ${MONGODB_URI:-mongodb://hajar:${MONGO_PASSWORD}@mongo:27017/hajar?authSource=admin}
+      MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
@@ -40,9 +26,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 900s
-    depends_on:
-      mongo:
-        condition: service_healthy
     command:
       - bash
       - -lc
@@ -121,6 +104,3 @@ services:
         npm ci
         npm run build -w dashboard
         exec npx --yes serve -s dashboard/dist -l 4173
-
-volumes:
-  hajar_mongo_data:
