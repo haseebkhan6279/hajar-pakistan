@@ -378,7 +378,7 @@ export const HERO_SLIDES: HeroSlide[] = [
     kicker: "HAJAR BY NAZISH ALI — Exclusive handcrafted formals",
     href: "/category/hajar-by-nazish-ali",
     cta: "Discover the signature line",
-    // 2752x1536 (1.79:1). Shot wide with headroom above both models, so it is
+    // 2400x1340 (1.79:1). Shot wide with headroom above both models, so it is
     // the one that survives the band's crop — hence it leads.
     focal: "center 20%",
   },
@@ -417,6 +417,8 @@ export const LOOKBOOK_COVERS: Record<string, { product: string; image: number }>
  * most recently updated pieces so it is never empty.
  */
 export const FEATURED_SLUGS = [
+  "meher",
+  "suraya",
   "lunara",
   "elara",
   "moonlight-pearl",

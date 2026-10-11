@@ -11,6 +11,11 @@ const INTERVAL = 4500;
 export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  // Slides other than the first are only mounted once the first has loaded,
+  // so on a phone connection they do not compete with it for bandwidth.
+  // After that, the next slide is fetched one step ahead of the rotation.
+  const [firstLoaded, setFirstLoaded] = useState(false);
+  const [mounted, setMounted] = useState<Set<number>>(() => new Set([0]));
   const touchStart = useRef<number | null>(null);
 
   const go = useCallback(
@@ -19,10 +24,19 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
   );
 
   useEffect(() => {
-    if (paused || slides.length < 2) return;
+    if (!firstLoaded) return;
+    setMounted((prev) => {
+      const ahead = (index + 1) % slides.length;
+      if (prev.has(index) && prev.has(ahead)) return prev;
+      return new Set(prev).add(index).add(ahead);
+    });
+  }, [index, firstLoaded, slides.length]);
+
+  useEffect(() => {
+    if (paused || !firstLoaded || slides.length < 2) return;
     const t = setTimeout(() => go(index + 1), INTERVAL);
     return () => clearTimeout(t);
-  }, [index, paused, go, slides.length]);
+  }, [index, paused, firstLoaded, go, slides.length]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -53,6 +67,7 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
     >
       {slides.map((item, i) => {
         const active = i === index;
+        if (!active && !mounted.has(i)) return null;
         return (
           <div
             key={item.image}
@@ -68,7 +83,9 @@ export function HeroSlider({ slides }: { slides: HeroSlide[] }) {
               fill
               priority={i === 0}
               sizes="100vw"
-              quality={85}
+              quality={75}
+              onLoad={i === 0 ? () => setFirstLoaded(true) : undefined}
+              onError={i === 0 ? () => setFirstLoaded(true) : undefined}
               style={{ objectPosition: item.focal ?? HERO_FOCAL_DEFAULT }}
               className="object-cover"
             />

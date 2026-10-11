@@ -20,3 +20,6 @@ npm-debug.log*
 
 # Local development database (portable MongoDB)
 .localdb/
+
+# Camera originals (HEIC, video) kept out of the deployed public folders
+photo-originals/

@@ -8,6 +8,15 @@ import { Price } from "@/components/currency/Price";
 import { addonsFor, savePercent, type Product } from "@/lib/data";
 import { catalogImageProps } from "@/lib/catalog";
 import { cn } from "@/lib/clsx";
+import { SITE } from "@/lib/seo";
+
+/** What a client can change on any piece. Mirrors the house customization card. */
+const CUSTOMIZATIONS = [
+  { title: "Heaviness of work", text: "Choose a lighter or more elaborate look." },
+  { title: "Sleeve length", text: "From sleeveless to full sleeves." },
+  { title: "Neckline", text: "Modified to suit your comfort and aesthetic." },
+  { title: "Anything else", text: "Tell us what you have in mind." },
+];
 
 export function ProductDetailClient({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -94,6 +103,58 @@ export function ProductDetailClient({ product }: { product: Product }) {
           <p className="font-mono text-[11px] text-hj-muted">
             SKU {product.sku}
           </p>
+        </div>
+      ),
+    },
+    {
+      id: "customization",
+      title: "Customization",
+      content: (
+        <div className="space-y-5 text-sm leading-relaxed text-hj-ink-soft">
+          <p className="max-w-prose font-display text-base italic text-hj-gold-deep">
+            Every client is unique, and so are her preferences. This piece can
+            be tailored to your personal style.
+          </p>
+          <ul className="grid grid-cols-2 gap-x-5 gap-y-4">
+            {CUSTOMIZATIONS.map((c) => (
+              <li key={c.title}>
+                <p className="text-[10px] uppercase tracking-[0.16em] text-hj-ink">
+                  {c.title}
+                </p>
+                <p className="mt-1 text-[13px] text-hj-muted">{c.text}</p>
+              </li>
+            ))}
+          </ul>
+          <ul className="divide-y divide-hj-border border-y border-hj-border">
+            <li className="flex gap-3 py-3">
+              <span aria-hidden className="w-4 shrink-0 text-hj-gold-deep">
+                ↓
+              </span>
+              <span>
+                <span className="text-hj-ink">Lighter work</span> — the price is
+                adjusted accordingly.
+              </span>
+            </li>
+            <li className="flex gap-3 py-3">
+              <span aria-hidden className="w-4 shrink-0 text-hj-gold-deep">
+                ↑
+              </span>
+              <span>
+                <span className="text-hj-ink">Added sleeves, heavier work</span>{" "}
+                or other changes that need more work carry an additional cost.
+              </span>
+            </li>
+          </ul>
+          <a
+            href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
+              `Hi, I'd like to customize ${product.name} (${product.sku}).`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tap-target inline-block text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
+          >
+            Discuss customization on WhatsApp →
+          </a>
         </div>
       ),
     },
@@ -344,7 +405,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
             ? "Enquire on WhatsApp about a made-to-order piece."
             : product.stock <= 3
               ? `Only ${product.stock} left in this colourway.`
-              : "Made to order · approximately 5–6 weeks within Pakistan."}
+              : "Made to order · approximately 5–6 weeks within Pakistan · customizable."}
         </p>
 
         <Link

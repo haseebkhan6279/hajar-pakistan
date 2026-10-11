@@ -221,6 +221,102 @@ const PRODUCTS = [
     "seoDescription": "A fitted silk blouse in a geometric lattice of silver and ice blue beadwork, layered with a sheer net cape and a matching silk drape skirt."
   },
   {
+    "name": "Meher",
+    "slug": "meher",
+    "category": "QAMARA",
+    "price": 140000,
+    "stock": 100,
+    "status": "published",
+    "tags": [
+      "new"
+    ],
+    "fabric": "Kathan silk, net",
+    "pieces": "3 Piece",
+    "description": "A Garden Woven in Gold.\n\nCrafted in luminous kathan silk, Meher celebrates the romance of traditional Pakistani artistry through a contemporary lens. The richly embellished choli and sweeping lehnga are adorned with intricate kora dabka and dimensional threadwork, creating delicate floral motifs throughout.\n\nFinished with statement tassel detailing at the back and paired with a soft tea-pink net dupatta framed by an embroidered four-sided border, Meher is an exquisite composition of colour, craftsmanship and timeless femininity.",
+    "highlights": [
+      "Kora and dabka",
+      "Dimensional threadwork",
+      "Tassel detailing at the back",
+      "Four-sided embroidered border"
+    ],
+    "colors": [
+      {
+        "name": "Mint",
+        "hex": "#A8C6BE"
+      }
+    ],
+    "specifications": [
+      {
+        "key": "Fabric",
+        "value": "kathan silk, net"
+      },
+      {
+        "key": "Colour",
+        "value": "mint, tea pink"
+      },
+      {
+        "key": "Care",
+        "value": "Dry clean only"
+      }
+    ],
+    "images": [
+      "/products/meher/02.jpg",
+      "/products/meher/01.jpg",
+      "/products/meher/03.jpg",
+      "/products/meher/04.jpg"
+    ],
+    "seoTitle": "Meher — HAJAR BY NAZISH ALI | HAJAR",
+    "seoDescription": "A kathan silk choli and sweeping lehnga in kora dabka and dimensional threadwork, with a tea-pink net dupatta framed by an embroidered border."
+  },
+  {
+    "name": "Suraya",
+    "slug": "suraya",
+    "category": "QAMARA",
+    "price": 69000,
+    "stock": 100,
+    "status": "published",
+    "tags": [
+      "new"
+    ],
+    "fabric": "Net, pure tissue zari, organza",
+    "pieces": "3 Piece",
+    "description": "A modern heirloom, handcrafted for unforgettable celebrations.\n\nA luminous celebration of contemporary elegance and traditional craftsmanship. Suraya features an intricately embellished net choli layered over pure tissue zari, adorned with cascading crystal chains, delicate blush florals and pearl detailing.\n\nPaired with a lustrous pure tissue zari lehnga, the ensemble is completed with an ethereal organza dupatta, finished with a four-sided embellished border and delicate tassels.",
+    "highlights": [
+      "Cascading crystal chains",
+      "Blush florals",
+      "Pearl detailing",
+      "Four-sided embellished border"
+    ],
+    "colors": [
+      {
+        "name": "Champagne",
+        "hex": "#CFC7A4"
+      }
+    ],
+    "specifications": [
+      {
+        "key": "Fabric",
+        "value": "net, pure tissue zari, organza"
+      },
+      {
+        "key": "Colour",
+        "value": "champagne, gold"
+      },
+      {
+        "key": "Care",
+        "value": "Dry clean only"
+      }
+    ],
+    "images": [
+      "/products/suraya/02.jpg",
+      "/products/suraya/01.jpg",
+      "/products/suraya/04.jpg",
+      "/products/suraya/03.jpg"
+    ],
+    "seoTitle": "Suraya — HAJAR BY NAZISH ALI | HAJAR",
+    "seoDescription": "An embellished net choli over pure tissue zari with crystal chains, blush florals and pearls, a tissue zari lehnga and an organza dupatta."
+  },
+  {
     "name": "Subh-e-Feroza",
     "slug": "subh-e-feroza",
     "category": "ZOUQ 1",
