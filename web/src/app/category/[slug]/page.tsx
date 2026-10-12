@@ -17,6 +17,7 @@ import {
 } from "@/lib/catalog";
 import {
   COLLECTIONS,
+  LOOKBOOK_COVERS,
   childCollections,
   collectionBySlug,
 } from "@/lib/data";
@@ -98,7 +99,11 @@ export default async function CategoryPage({
   const allProducts = await getProductsByCategory(slug);
   const volumeCards = volumes.map((v) => {
     const pieces = allProducts.filter((p) => p.categorySlug === v.slug);
+    const choice = LOOKBOOK_COVERS[v.slug];
+    const picked = pieces.find((p) => p.slug === choice?.product);
     const cover =
+      picked?.images[choice?.image ?? 0] ||
+      picked?.images[0] ||
       categories.find((c) => c.slug === v.slug)?.image ||
       pieces[0]?.images[0] ||
       PLACEHOLDER_IMAGE;

@@ -10,87 +10,6 @@ import { catalogImageProps } from "@/lib/catalog";
 import { cn } from "@/lib/clsx";
 import { SITE } from "@/lib/seo";
 
-/** What a client can change on any piece. Mirrors the house customization card. */
-const CUSTOMIZATIONS = [
-  { title: "Heaviness of work", text: "A lighter or more elaborate look, as you prefer." },
-  { title: "Sleeve length", text: "From sleeveless to full sleeves." },
-  { title: "Neckline", text: "Reshaped to suit your comfort and aesthetic." },
-  { title: "Anything else", text: "Any other change, as per your requirements." },
-];
-
-/**
- * The house customization card, set as a quiet band under the piece: copy and
- * the enquiry on the left, the four changes as a numbered list on the right.
- */
-function CustomizationCard({ product }: { product: Product }) {
-  const whatsapp = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
-    `Hi, I'd like to customize ${product.name} (${product.sku}).`
-  )}`;
-  return (
-    <section
-      aria-labelledby="customization-title"
-      className="mt-16 bg-hj-cream p-2 md:mt-24 md:p-3"
-    >
-      <div className="grid gap-10 border border-hj-gold/30 px-6 py-10 md:px-12 md:py-14 lg:grid-cols-[5fr_7fr] lg:gap-16">
-        <div>
-          <p className="eyebrow text-hj-gold-deep">Bespoke</p>
-          <h2
-            id="customization-title"
-            className="mt-3 font-display text-4xl leading-[1.05] text-hj-ink md:text-5xl"
-          >
-            Customization,
-            <span className="block italic text-hj-gold-deep">
-              always an option.
-            </span>
-          </h2>
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-hj-ink-soft">
-            Every client is unique, and so are her preferences. Each piece can
-            be tailored to your personal style — tell us what you have in mind
-            and we will make it yours.
-          </p>
-          <a
-            href={whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex h-12 items-center justify-center bg-hj-ink px-8 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
-          >
-            Discuss customization
-          </a>
-        </div>
-
-        <div>
-          <ol className="border-t border-hj-gold/25">
-            {CUSTOMIZATIONS.map((c, i) => (
-              <li
-                key={c.title}
-                className="flex items-baseline gap-5 border-b border-hj-gold/25 py-4"
-              >
-                <span className="w-6 shrink-0 font-display text-lg text-hj-gold-deep">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="flex-1 sm:flex sm:items-baseline sm:justify-between sm:gap-6">
-                  <span className="block text-[11px] uppercase tracking-[0.18em] text-hj-ink">
-                    {c.title}
-                  </span>
-                  <span className="mt-1 block text-[13px] text-hj-muted sm:mt-0 sm:text-right">
-                    {c.text}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ol>
-          <p className="mt-6 text-[13px] leading-relaxed text-hj-ink-soft">
-            <span className="text-hj-gold-deep">Lighter work</span> — the price
-            is adjusted accordingly.{" "}
-            <span className="text-hj-gold-deep">Added sleeves, heavier work</span>{" "}
-            or other changes that need more work carry an additional cost.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function ProductDetailClient({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [active, setActive] = useState(0);
@@ -121,7 +40,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
     .map((p) => p.trim())
     .filter(Boolean);
   // The opening line is the house line for the piece; it sits under the
-  // price, and the rest of the copy goes in Details & fabric
+  // name, above the price, and the rest of the copy goes in Details & fabric
   const tagline = paragraphs.length > 1 ? paragraphs[0] : "";
   const body = tagline ? paragraphs.slice(1) : paragraphs;
 
@@ -217,6 +136,33 @@ export function ProductDetailClient({ product }: { product: Product }) {
         </div>
       ),
     },
+    {
+      id: "customization",
+      title: "Customization",
+      content: (
+        <div className="space-y-5">
+          {/* The house customization card, as designed — the alt carries its copy */}
+          <Image
+            src="/media/customization.png"
+            alt="Customization, always an option. Heaviness of work, sleeve length, neckline and any other detail can be changed. Lighter work lowers the price; added sleeves, heavier work or other extra changes carry an additional cost."
+            width={422}
+            height={627}
+            sizes="(max-width: 640px) 100vw, 420px"
+            className="h-auto w-full max-w-[420px]"
+          />
+          <a
+            href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
+              `Hi, I'd like to customize ${product.name} (${product.sku}).`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-11 items-center justify-center bg-hj-ink px-7 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
+          >
+            Discuss customization
+          </a>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -281,6 +227,12 @@ export function ProductDetailClient({ product }: { product: Product }) {
           {product.name}
         </h1>
 
+        {tagline && (
+          <p className="mt-3 max-w-prose font-display text-lg italic leading-snug text-hj-gold-deep">
+            {tagline}
+          </p>
+        )}
+
         <div className="mt-5 flex flex-wrap items-baseline gap-3">
           <span
             className={cn(
@@ -305,12 +257,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
         {product.pieces && (
           <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-hj-muted">
             {product.pieces}
-          </p>
-        )}
-
-        {tagline && (
-          <p className="mt-5 max-w-prose font-display text-lg italic leading-snug text-hj-gold-deep">
-            {tagline}
           </p>
         )}
 
@@ -464,7 +410,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
       </div>
     </div>
 
-    <CustomizationCard product={product} />
     </>
   );
 }
