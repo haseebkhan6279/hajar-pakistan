@@ -12,11 +12,84 @@ import { SITE } from "@/lib/seo";
 
 /** What a client can change on any piece. Mirrors the house customization card. */
 const CUSTOMIZATIONS = [
-  { title: "Heaviness of work", text: "Choose a lighter or more elaborate look." },
+  { title: "Heaviness of work", text: "A lighter or more elaborate look, as you prefer." },
   { title: "Sleeve length", text: "From sleeveless to full sleeves." },
-  { title: "Neckline", text: "Modified to suit your comfort and aesthetic." },
-  { title: "Anything else", text: "Tell us what you have in mind." },
+  { title: "Neckline", text: "Reshaped to suit your comfort and aesthetic." },
+  { title: "Anything else", text: "Any other change, as per your requirements." },
 ];
+
+/**
+ * The house customization card, set as a quiet band under the piece: copy and
+ * the enquiry on the left, the four changes as a numbered list on the right.
+ */
+function CustomizationCard({ product }: { product: Product }) {
+  const whatsapp = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
+    `Hi, I'd like to customize ${product.name} (${product.sku}).`
+  )}`;
+  return (
+    <section
+      aria-labelledby="customization-title"
+      className="mt-16 bg-hj-cream p-2 md:mt-24 md:p-3"
+    >
+      <div className="grid gap-10 border border-hj-gold/30 px-6 py-10 md:px-12 md:py-14 lg:grid-cols-[5fr_7fr] lg:gap-16">
+        <div>
+          <p className="eyebrow text-hj-gold-deep">Bespoke</p>
+          <h2
+            id="customization-title"
+            className="mt-3 font-display text-4xl leading-[1.05] text-hj-ink md:text-5xl"
+          >
+            Customization,
+            <span className="block italic text-hj-gold-deep">
+              always an option.
+            </span>
+          </h2>
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-hj-ink-soft">
+            Every client is unique, and so are her preferences. Each piece can
+            be tailored to your personal style — tell us what you have in mind
+            and we will make it yours.
+          </p>
+          <a
+            href={whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex h-12 items-center justify-center bg-hj-ink px-8 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
+          >
+            Discuss customization
+          </a>
+        </div>
+
+        <div>
+          <ol className="border-t border-hj-gold/25">
+            {CUSTOMIZATIONS.map((c, i) => (
+              <li
+                key={c.title}
+                className="flex items-baseline gap-5 border-b border-hj-gold/25 py-4"
+              >
+                <span className="w-6 shrink-0 font-display text-lg text-hj-gold-deep">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="flex-1 sm:flex sm:items-baseline sm:justify-between sm:gap-6">
+                  <span className="block text-[11px] uppercase tracking-[0.18em] text-hj-ink">
+                    {c.title}
+                  </span>
+                  <span className="mt-1 block text-[13px] text-hj-muted sm:mt-0 sm:text-right">
+                    {c.text}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6 text-[13px] leading-relaxed text-hj-ink-soft">
+            <span className="text-hj-gold-deep">Lighter work</span> — the price
+            is adjusted accordingly.{" "}
+            <span className="text-hj-gold-deep">Added sleeves, heavier work</span>{" "}
+            or other changes that need more work carry an additional cost.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function ProductDetailClient({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -107,58 +180,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
       ),
     },
     {
-      id: "customization",
-      title: "Customization",
-      content: (
-        <div className="space-y-5 text-sm leading-relaxed text-hj-ink-soft">
-          <p className="max-w-prose font-display text-base italic text-hj-gold-deep">
-            Every client is unique, and so are her preferences. This piece can
-            be tailored to your personal style.
-          </p>
-          <ul className="grid grid-cols-2 gap-x-5 gap-y-4">
-            {CUSTOMIZATIONS.map((c) => (
-              <li key={c.title}>
-                <p className="text-[10px] uppercase tracking-[0.16em] text-hj-ink">
-                  {c.title}
-                </p>
-                <p className="mt-1 text-[13px] text-hj-muted">{c.text}</p>
-              </li>
-            ))}
-          </ul>
-          <ul className="divide-y divide-hj-border border-y border-hj-border">
-            <li className="flex gap-3 py-3">
-              <span aria-hidden className="w-4 shrink-0 text-hj-gold-deep">
-                ↓
-              </span>
-              <span>
-                <span className="text-hj-ink">Lighter work</span> — the price is
-                adjusted accordingly.
-              </span>
-            </li>
-            <li className="flex gap-3 py-3">
-              <span aria-hidden className="w-4 shrink-0 text-hj-gold-deep">
-                ↑
-              </span>
-              <span>
-                <span className="text-hj-ink">Added sleeves, heavier work</span>{" "}
-                or other changes that need more work carry an additional cost.
-              </span>
-            </li>
-          </ul>
-          <a
-            href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
-              `Hi, I'd like to customize ${product.name} (${product.sku}).`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="tap-target inline-block text-[11px] uppercase tracking-[0.14em] text-hj-gold-deep hover:underline"
-          >
-            Discuss customization on WhatsApp →
-          </a>
-        </div>
-      ),
-    },
-    {
       id: "delivery",
       title: "Delivery & returns",
       content: (
@@ -199,6 +220,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
   ];
 
   return (
+    <>
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
       {/* Gallery */}
       {/* min-w-0: a grid item defaults to min-width:auto, so without this the
@@ -441,5 +463,8 @@ export function ProductDetailClient({ product }: { product: Product }) {
         </div>
       </div>
     </div>
+
+    <CustomizationCard product={product} />
+    </>
   );
 }

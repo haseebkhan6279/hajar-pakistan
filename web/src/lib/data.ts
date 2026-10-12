@@ -69,7 +69,13 @@ export const COLLECTION_ADDONS: Record<string, ProductAddon[]> = {
 };
 
 /** Pieces that already include the look — no dupatta / sleeve extras. */
-const ADDON_EXCLUDED_SLUGS = new Set(["blush-hour", "elara", "lunara"]);
+const ADDON_EXCLUDED_SLUGS = new Set([
+  "blush-hour",
+  "elara",
+  "lunara",
+  "meher",
+  "suraya",
+]);
 
 export function addonsFor(
   categorySlug: string,
