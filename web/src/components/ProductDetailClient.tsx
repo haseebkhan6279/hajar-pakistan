@@ -8,7 +8,9 @@ import { Price } from "@/components/currency/Price";
 import { addonsFor, savePercent, type Product } from "@/lib/data";
 import { catalogImageProps } from "@/lib/catalog";
 import { cn } from "@/lib/clsx";
-import { SITE } from "@/lib/seo";
+
+/** The house customization card closes every product gallery. */
+const CUSTOMIZATION_IMAGE = "/customization.jpeg";
 
 export function ProductDetailClient({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -33,6 +35,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
   const save = savePercent(product.price, product.compareAtPrice);
   const soldOut = product.stock === 0;
   const specRows = Object.entries(product.specs);
+  const gallery = [...product.images, CUSTOMIZATION_IMAGE];
 
   // Descriptions arrive as blank-line separated paragraphs
   const paragraphs = product.description
@@ -136,33 +139,6 @@ export function ProductDetailClient({ product }: { product: Product }) {
         </div>
       ),
     },
-    {
-      id: "customization",
-      title: "Customization",
-      content: (
-        <div className="space-y-5">
-          {/* The house customization card, as designed — the alt carries its copy */}
-          <Image
-            src="/media/customization.png"
-            alt="Customization, always an option. Heaviness of work, sleeve length, neckline and any other detail can be changed. Lighter work lowers the price; added sleeves, heavier work or other extra changes carry an additional cost."
-            width={422}
-            height={627}
-            sizes="(max-width: 640px) 100vw, 420px"
-            className="h-auto w-full max-w-[420px]"
-          />
-          <a
-            href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(
-              `Hi, I'd like to customize ${product.name} (${product.sku}).`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center bg-hj-ink px-7 text-[11px] uppercase tracking-[0.18em] text-hj-gold-soft transition-colors hover:bg-hj-gold hover:text-white"
-          >
-            Discuss customization
-          </a>
-        </div>
-      ),
-    },
   ];
 
   return (
@@ -175,14 +151,18 @@ export function ProductDetailClient({ product }: { product: Product }) {
       <div className="min-w-0">
         <div className="relative overflow-hidden bg-hj-sand">
           <Image
-            src={product.images[active]}
-            alt={`${product.name} — view ${active + 1}`}
+            src={gallery[active]}
+            alt={
+              gallery[active] === CUSTOMIZATION_IMAGE
+                ? "Customization, always an option. Heaviness of work, sleeve length, neckline and any other detail can be changed. Lighter work lowers the price; added sleeves, heavier work or other extra changes carry an additional cost."
+                : `${product.name} — view ${active + 1}`
+            }
             width={1024}
             height={1536}
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="h-auto w-full"
-            {...catalogImageProps(product.images[active])}
+            {...catalogImageProps(gallery[active])}
           />
           {product.badge && (
             <span className="absolute left-4 top-4 bg-hj-ink px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] text-hj-gold-soft">
@@ -191,9 +171,9 @@ export function ProductDetailClient({ product }: { product: Product }) {
           )}
         </div>
 
-        {product.images.length > 1 && (
+        {gallery.length > 1 && (
           <div className="scrollbar-none mt-3 flex gap-3 overflow-x-auto">
-            {product.images.map((src, i) => (
+            {gallery.map((src, i) => (
               <button
                 key={`${src}-${i}`}
                 type="button"
